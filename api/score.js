@@ -382,15 +382,15 @@ export default async function handler(req, res) {
 
     // ========== API CALL ==========
     const requestBody = {
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 12000,
+      model: 'claude-opus-4-6',
+      max_tokens: 16000,
       thinking: {
         type: 'enabled',
         budget_tokens: 10000
       },
      tools: [
-        { type: 'web_search_20250305', name: 'web_search', max_uses: 6 },
-        { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 2 }
+        { type: 'web_search_20250305', name: 'web_search', max_uses: 20 },
+        { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 8 }
       ],
       messages: [{ role: 'user', content: contentBlocks }]
     };
