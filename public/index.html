@@ -1089,7 +1089,42 @@ function toggleScoreDetail(type) {
   if (block) block.classList.toggle('expanded');
 }
 
+// ============================================================
+// IC REPORT HANDOFF
+// ------------------------------------------------------------
+// When the user clicks "Open IC Report", we write the latest
+// rendered payload to localStorage under a known key and open
+// /report.html in a new tab. The report page reads the key and
+// renders the full print-optimized IC document.
+// ============================================================
+let _lastRenderedPayload = null; // populated inside renderResults()
+
+function openICReport() {
+  if (!_lastRenderedPayload) {
+    alert('No analysis loaded yet. Please run PERCH first.');
+    return;
+  }
+  try {
+    localStorage.setItem('perch_last_report', JSON.stringify(_lastRenderedPayload));
+  } catch (e) {
+    console.error('Failed to save report payload to localStorage:', e);
+    alert('Could not prepare the IC Report. Your browser may have localStorage disabled.');
+    return;
+  }
+  // Open report.html in a new tab. The report page reads
+  // the payload and renders for print.
+  window.open('/report.html', '_blank');
+}
+
 function renderResults(company, result, meta) {
+  // Stash the payload for the IC Report hand-off
+  _lastRenderedPayload = {
+    company: company,
+    result: result,
+    meta: meta,
+    generated_at: new Date().toISOString()
+  };
+
   const riskScore = calculateWeightedScore(result.risk_scores, RISK_FACTORS);
   const readinessScore = calculateWeightedScore(result.readiness_scores, READINESS_FACTORS);
   const riskBand = riskThreatBand(riskScore);
@@ -1107,8 +1142,11 @@ function renderResults(company, result, meta) {
   container.innerHTML = `
     <div class="result-header">
       <div class="report-actions no-print">
-        <button class="btn-action" onclick="window.print()" title="Print or save as PDF">
-          🖨 Print Report
+        <button class="btn-action" onclick="openICReport()" title="Open IC-distribution quality PDF report in new tab">
+          📄 Open IC Report
+        </button>
+        <button class="btn-action btn-action-secondary" onclick="window.print()" title="Quick print this page">
+          🖨 Quick Print
         </button>
         <button class="btn-action btn-action-secondary" onclick="resetScreener()" title="Start a new analysis">
           ← New Analysis
@@ -1502,7 +1540,8 @@ function renderResults(company, result, meta) {
     </details>
 
     <div class="no-print" style="text-align:center; margin-top:40px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-      <button class="btn" onclick="window.print()" style="background:var(--gold-bright);">🖨 Print / Save as PDF</button>
+      <button class="btn" onclick="openICReport()" style="background:var(--gold-bright);">📄 Open IC Report</button>
+      <button class="btn btn-secondary" onclick="window.print()">🖨 Quick Print This Page</button>
       <button class="btn btn-secondary" onclick="resetScreener()">← Analyze Another Company</button>
     </div>
   `;
