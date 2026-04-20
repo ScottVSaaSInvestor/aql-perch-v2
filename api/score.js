@@ -388,9 +388,9 @@ export default async function handler(req, res) {
         type: 'enabled',
         budget_tokens: 10000
       },
-      tools: [
-        { type: 'web_search_20250305', name: 'web_search', max_uses: 20 },
-        { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 8 }
+     tools: [
+        { type: 'web_search_20250305', name: 'web_search', max_uses: 10 },
+        { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 4 }
       ],
       messages: [{ role: 'user', content: contentBlocks }]
     };
