@@ -3,14 +3,20 @@
 // Vercel Serverless Function — Backend API
 // ============================================================
 //
-// Key fixes over v1:
-// 1. Uses content.find() to locate text block (NOT content[0]) — content[0]
-//    is the thinking block when extended thinking is enabled, which caused
-//    silent parse failures in v1.
-// 2. Checks stop_reason === 'max_tokens' before parsing. Retries on truncation.
-// 3. Logs full raw response to console for any parse failure (inspectable in
-//    Vercel logs).
-// 4. Robust multi-strategy JSON extraction as a final safety net.
+// v2.1 fixes over v2.0:
+// 1. Uses LAST text block, not first. With extended thinking + long
+//    tool sequences, Claude narrates between tool calls ("Now I have
+//    enough evidence..."). The JSON output is the final text block,
+//    not the first. v2.0's content.find() grabbed the first one.
+// 2. Prompt reinforces that the LAST response must be the JSON and
+//    nothing else — preventing Claude from ending the turn on narration.
+// 3. Retry logic when last text block is still too short: log loudly
+//    and surface all text blocks for diagnosis.
+//
+// Original v2 fixes preserved:
+// - Checks stop_reason === 'max_tokens' before parsing.
+// - Logs full raw response for parse failures.
+// - Multi-strategy JSON extraction as safety net.
 //
 // Anthropic model: Claude Sonnet 4 with web_search + web_fetch + extended thinking
 // ============================================================
@@ -61,6 +67,24 @@ Integrate evidence from these uploaded documents into your factor rationales, ex
 Your job: perform a thorough, deep, evidence-based 16-factor analysis of the target company AND project a 12-month forward view. The output must be defensible to an IC and readable to an LP.${docsNote}
 
 ============================================================
+⚠ CRITICAL OUTPUT CONTRACT — READ THIS BEFORE ANYTHING ELSE ⚠
+============================================================
+
+Your response WILL contain:
+1. Tool use blocks (web_search, web_fetch) — fine, use them as needed
+2. Optional brief thinking / planning blocks between tool calls — fine
+3. EXACTLY ONE final text block that is a single valid JSON object matching the schema at the bottom of this prompt
+
+The FINAL block you produce MUST be the complete JSON object. Do NOT end your turn with a commentary text block like "I have enough evidence now" or "Let me summarize." If you reach a moment where you want to write such a block, INSTEAD write the JSON object — that IS how you end the turn.
+
+The parser will read ONLY your last text block. Any preceding text blocks are discarded. So:
+- If you need to pause and think between tool calls, keep those text blocks brief
+- Your final text block must be the JSON, start-to-finish, no prose before or after
+- No markdown fences. No preamble. Start with { and end with }
+
+If you have done enough research, STOP researching and WRITE THE JSON. Do not do "one more search" — write the scorecard with what you have.
+
+============================================================
 CONVERGENCE LOGIC — THE FRAMEWORK IN ONE PAGE
 ============================================================
 
@@ -86,17 +110,17 @@ Additional context from analyst: ${company.context || '(none provided - use publ
 ANALYSIS PROCESS
 ============================================================
 
-STEP 1: RESEARCH (use web_search AGGRESSIVELY, use web_fetch to read full pages)
+STEP 1: RESEARCH (use web_search, use web_fetch to read full pages)
 
-Do 15-25 searches and fetch 5-8 full pages before scoring. If uploaded documents were provided, READ THEM FIRST.
+Do 10-20 searches and fetch 3-6 full pages. This is a research BUDGET, not a research QUOTA — stop early if you have enough. If uploaded documents were provided, READ THEM FIRST before web searches.
 
 Research dimensions:
-A. Company primary evidence (4-6 searches + 2-3 fetches): product page, AI features, case studies
-B. Competitive landscape (4-6 searches): named competitors, AI-native entrants, funding signals
-C. Category disruption (2-3 searches): analyst reports, category trends
-D. Customer voice (2 searches + 1 fetch): G2/Capterra reviews, complaints
-E. Leadership (1-2 searches): CEO statements on AI strategy
-F. Financial/regulatory (1-2 searches): funding, compliance certs
+A. Company primary evidence: product page, AI features, case studies
+B. Competitive landscape: named competitors, AI-native entrants, funding signals
+C. Category disruption: analyst reports, category trends
+D. Customer voice: G2/Capterra reviews, complaints
+E. Leadership: CEO statements on AI strategy
+F. Financial/regulatory: funding, compliance certs
 
 STEP 2: SCORE ALL 16 FACTORS with specific evidence citations.
 
@@ -105,6 +129,8 @@ STEP 3: PROJECT 12-MONTH TRAJECTORY based on current scores + category dynamics 
 STEP 4: IDENTIFY 3-4 THRESHOLD TRIGGERS — observable events that would force re-underwrite.
 
 STEP 5: BUILD THE SOA MILESTONE MAP. Given urgency (Risk) and feasible speed (Readiness), sequence the concrete SOA milestones this company must hit.
+
+STEP 6: WRITE THE JSON. This is the output. Do not skip this step. Do not end your turn without it.
 
 ============================================================
 AQL QUADRANT FRAMEWORK (canonical from Value Creation Manifesto)
@@ -213,7 +239,9 @@ Name SPECIFIC assumptions. Be honest about uncertainty.
 OUTPUT FORMAT — CRITICAL
 ============================================================
 
-Respond with ONLY a single valid JSON object matching the structure below. No preamble, no commentary, no markdown fences. Start with { and end with }.
+Your FINAL text block MUST be ONLY a single valid JSON object matching the structure below. No preamble, no commentary, no markdown fences. Start with { and end with }.
+
+REMINDER: The parser reads your LAST text block. Anything you write before the final block (brief planning notes between tool calls) is fine, but the LAST text block must be the JSON.
 
 {
   "company_summary": "3-4 sentences: what they do, stage/scale, material recent events",
@@ -273,7 +301,9 @@ Respond with ONLY a single valid JSON object matching the structure below. No pr
     "biggest_risk_to_monitor": "one sentence",
     "cadence_recommendation": "one sentence on review cadence given quadrant placement"
   }
-}`;
+}
+
+FINAL REMINDER: After you finish your research, your very next action is to output the JSON above. Not more searches. Not commentary. Just the JSON.`;
 }
 
 // ============================================================
@@ -282,12 +312,10 @@ Respond with ONLY a single valid JSON object matching the structure below. No pr
 function extractJSON(text) {
   if (!text || typeof text !== 'string') return null;
 
-  // Strategy 1: Direct parse
   try {
     return { parsed: JSON.parse(text.trim()), strategy: 'direct' };
   } catch (e) { /* fall through */ }
 
-  // Strategy 2: Strip markdown fences
   try {
     const clean = text
       .replace(/^[\s\S]*?```(?:json)?\s*/i, '')
@@ -296,7 +324,6 @@ function extractJSON(text) {
     return { parsed: JSON.parse(clean), strategy: 'fence-strip' };
   } catch (e) { /* fall through */ }
 
-  // Strategy 3: First { to last } (greedy)
   try {
     const firstBrace = text.indexOf('{');
     const lastBrace = text.lastIndexOf('}');
@@ -308,7 +335,6 @@ function extractJSON(text) {
     }
   } catch (e) { /* fall through */ }
 
-  // Strategy 4: Regex for largest JSON-like object
   try {
     const match = text.match(/\{[\s\S]*\}/);
     if (match) {
@@ -343,7 +369,6 @@ export default async function handler(req, res) {
   const company = { name, domain, vertical, context: context || '' };
   const docs = Array.isArray(documents) ? documents : [];
 
-  // Validate documents
   for (const d of docs) {
     if (!d.name || !d.type || !d.data) {
       return res.status(400).json({ error: 'Malformed document: missing name, type, or data' });
@@ -356,7 +381,6 @@ export default async function handler(req, res) {
   try {
     const prompt = buildScoringPrompt(company, docs.length);
 
-    // Build content blocks: documents first, then text prompt
     const contentBlocks = [];
     for (const d of docs) {
       if (d.type === 'application/pdf') {
@@ -380,7 +404,6 @@ export default async function handler(req, res) {
     }
     contentBlocks.push({ type: 'text', text: prompt });
 
-    // ========== API CALL ==========
     const requestBody = {
       model: 'claude-opus-4-6',
       max_tokens: 16000,
@@ -388,7 +411,7 @@ export default async function handler(req, res) {
         type: 'enabled',
         budget_tokens: 10000
       },
-     tools: [
+      tools: [
         { type: 'web_search_20250305', name: 'web_search', max_uses: 20 },
         { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 8 }
       ],
@@ -420,8 +443,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // ========== STOP REASON CHECK (Genspark fix #2) ==========
-    // If Claude ran out of tokens, the JSON will be truncated. Don't even try to parse.
     if (data.stop_reason === 'max_tokens') {
       console.error('[PERCH] Response truncated (stop_reason=max_tokens)');
       console.error('[PERCH] Usage:', JSON.stringify(data.usage));
@@ -432,13 +453,15 @@ export default async function handler(req, res) {
       });
     }
 
-    // ========== EXTRACT TEXT CONTENT (Genspark fix #1) ==========
-    // Use find() to locate the text block. content[0] is the thinking block
-    // when extended thinking is enabled — that was the root cause of v1 failures.
-    const textBlock = data.content.find(b => b.type === 'text');
-    const rawText = textBlock?.text ?? '';
+    // ========== EXTRACT TEXT CONTENT (v2.1 fix) ==========
+    // When extended thinking + tool use produces mid-flow narration, there can
+    // be multiple text blocks. The final JSON output is the LAST text block.
+    // v2.0 used .find() which grabbed the first block — that was narration,
+    // not JSON. Use the last text block instead.
+    const textBlocks = data.content.filter(b => b.type === 'text');
+    const lastTextBlock = textBlocks.length > 0 ? textBlocks[textBlocks.length - 1] : null;
+    const rawText = lastTextBlock?.text ?? '';
 
-    // Observability metrics
     const searchCount = data.content.filter(b =>
       b.type === 'server_tool_use' && b.name === 'web_search'
     ).length;
@@ -448,24 +471,30 @@ export default async function handler(req, res) {
     const hasThinking = data.content.some(b => b.type === 'thinking');
 
     console.log(`[PERCH] Searches: ${searchCount}, Fetches: ${fetchCount}, Thinking used: ${hasThinking}`);
-    console.log(`[PERCH] Stop reason: ${data.stop_reason}, Text length: ${rawText.length}`);
+    console.log(`[PERCH] Text blocks found: ${textBlocks.length}`);
+    console.log(`[PERCH] Stop reason: ${data.stop_reason}, Last text length: ${rawText.length}`);
 
     // ========== PARSE JSON ==========
     if (!rawText || rawText.length < 100) {
-      console.error('[PERCH] Text block is empty or too short');
-      console.error('[PERCH] Content blocks received:', data.content.map(b => b.type).join(', '));
-      console.error('[PERCH] Raw text (first 500 chars):', rawText.substring(0, 500));
+      console.error('[PERCH] Last text block is empty or too short');
+      console.error('[PERCH] All text blocks (for diagnosis):');
+      textBlocks.forEach((b, i) => {
+        console.error(`  Block ${i + 1}/${textBlocks.length} (len=${b.text.length}): ${b.text.substring(0, 200)}`);
+      });
+      console.error('[PERCH] Content block types in order:', data.content.map(b => b.type).join(', '));
+
       return res.status(500).json({
-        error: 'Anthropic response did not contain a usable text block',
-        content_block_types: data.content.map(b => b.type),
-        text_length: rawText.length,
-        raw_preview: rawText.substring(0, 500)
+        error: 'Claude finished the turn without writing the JSON scorecard. This usually means the research ran out of steam before the final output. Retry — usually works on second attempt.',
+        text_blocks_count: textBlocks.length,
+        last_text_preview: rawText.substring(0, 500),
+        all_text_blocks_preview: textBlocks.map(b => b.text.substring(0, 200)),
+        stop_reason: data.stop_reason,
+        content_block_types: data.content.map(b => b.type)
       });
     }
 
     const extraction = extractJSON(rawText);
     if (!extraction) {
-      // Full diagnostic logging — inspectable in Vercel logs
       console.error('[PERCH] JSON extraction failed. Full raw response:');
       console.error(rawText.substring(0, 4000));
       console.error('[PERCH] Response end (last 500 chars):');
@@ -492,6 +521,7 @@ export default async function handler(req, res) {
         parse_strategy: extraction.strategy,
         model: data.model,
         stop_reason: data.stop_reason,
+        text_blocks_count: textBlocks.length,
         usage: {
           input_tokens: data.usage?.input_tokens || 0,
           output_tokens: data.usage?.output_tokens || 0
