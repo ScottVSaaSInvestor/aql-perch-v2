@@ -383,7 +383,7 @@ export default async function handler(req, res) {
     // ========== API CALL ==========
     const requestBody = {
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 16000,
+      max_tokens: 12000,
       thinking: {
         type: 'enabled',
         budget_tokens: 10000
