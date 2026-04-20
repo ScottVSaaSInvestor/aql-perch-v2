@@ -1,0 +1,14 @@
+{
+  "name": "aql-perch-v2",
+  "version": "2.0.0",
+  "description": "PERCH v2 — AQL Growth AI Risk & Readiness diagnostic. Fresh rebuild with content.find() bug fix and stop_reason retry logic.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
