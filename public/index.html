@@ -427,7 +427,7 @@ textarea { min-height: 80px; resize: vertical; font-family: 'Inter', sans-serif;
 
 .matrix-caption { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.75; font-style: italic; text-align: center; max-width: 780px; margin-left: auto; margin-right: auto; }
 
-/* Answer Key section */
+/* Reading the Placement section */
 .answer-key-section { background: linear-gradient(135deg, var(--navy-card) 0%, var(--navy-mid) 100%); border-radius: 8px; padding: 40px; margin-bottom: 24px; border: 1px solid rgba(201, 169, 97, 0.15); }
 .answer-key-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 30px; margin: 0 0 10px; color: #fff; font-weight: 500; }
 .answer-key-intro { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.6; margin: 0 0 32px; max-width: 820px; }
@@ -926,10 +926,10 @@ function determineQuadrant(riskScore, readinessScore) {
   // and readinessBand above MUST match on the 50 boundary.
   const lowThreat = riskScore <= 50;
   const highReady = readinessScore > 50;
-  if (lowThreat && highReady) return { id: 'q1', name: 'EXECUTE', sub: 'Low Threat · High Readiness', cls: 'is-execute', tagline: 'Run the playbook deliberately' };
-  if (!lowThreat && highReady) return { id: 'q3', name: 'RACE MODE', sub: 'High Threat · High Readiness', cls: 'is-race', tagline: 'Ship fast, competitive pressure is real' };
-  if (lowThreat && !highReady) return { id: 'q2', name: 'BUILD MODE', sub: 'Low Threat · Low Readiness', cls: 'is-build', tagline: 'Foundations first, then AI' };
-  return { id: 'q4', name: 'DANGER ZONE', sub: 'High Threat · Low Readiness', cls: 'is-danger', tagline: 'Evaluate thesis before proceeding' };
+  if (lowThreat && highReady) return { id: 'q1', name: 'EXECUTE', sub: 'Low Threat · High Readiness', cls: 'is-execute', tagline: 'Moat intact. Foundations ready.' };
+  if (!lowThreat && highReady) return { id: 'q3', name: 'RACE MODE', sub: 'High Threat · High Readiness', cls: 'is-race', tagline: 'Foundations ready. Window compressing.' };
+  if (lowThreat && !highReady) return { id: 'q2', name: 'BUILD MODE', sub: 'Low Threat · Low Readiness', cls: 'is-build', tagline: 'Moat intact. Foundations emerging.' };
+  return { id: 'q4', name: 'DANGER ZONE', sub: 'High Threat · Low Readiness', cls: 'is-danger', tagline: 'Pressure outpacing feasible execution.' };
 }
 
 function factorScoreClass(score, isRisk) {
@@ -1498,8 +1498,8 @@ function renderResults(company, result, meta) {
     </div>
 
     <div class="answer-key-section">
-      <h2>Answer Key — Why This Matters</h2>
-      <p class="answer-key-intro">PERCH doesn't just produce a placement. It tells you what operating posture the deal requires. Each quadrant below has a distinct thesis, cadence, and risk profile. The placement of <strong style="color:var(--gold-bright);">${escapeHtml(company.name)}</strong> in <strong style="color:var(--gold-bright);">${escapeHtml(quadrant.name)}</strong> is not a rating — it's a prescription for how to act.</p>
+      <h2>Reading the Placement</h2>
+      <p class="answer-key-intro">Every PERCH placement carries an implied operating tempo. The quadrant below reflects what the data suggests about pace, emphasis, and surface area of attention during the hold. This is a read, not a rating — a lens through which to interpret what the placement of <strong style="color:var(--gold-bright);">${escapeHtml(company.name)}</strong> in <strong style="color:var(--gold-bright);">${escapeHtml(quadrant.name)}</strong> means for the period ahead.</p>
 
       <div class="answer-key-grid">
         <div class="answer-card answer-card-execute ${quadrant.id === 'q1' ? 'answer-card-active' : ''}">
@@ -1508,12 +1508,11 @@ function renderResults(company, result, meta) {
             <div class="answer-card-name">EXECUTE</div>
             <div class="answer-card-tag">Low Threat · High Readiness</div>
           </div>
-          <div class="answer-card-thesis">"The thesis works. Run the playbook."</div>
+          <div class="answer-card-thesis">Moat intact. Foundations ready.</div>
           <div class="answer-card-body">
-            <p>You found a company where the moat is real AND the foundations are ready. The job is not to figure out whether to win — it's to run the SOAR playbook with quality and discipline, compound the advantage, and set up exit multiple expansion.</p>
-            <p><strong>Posture:</strong> Buy with conviction. Extend the lead. Quality over speed.</p>
-            <p><strong>Cadence:</strong> Deliberate. Quarterly board review. Monthly SOAR score refresh.</p>
-            <p><strong>Portfolio pattern:</strong> Jane Software · AxisCare · CommonSKU · Financial Cents · Hauler Hero</p>
+            <p>Companies in this quadrant exhibit both durable category defensibility and the operational foundations to compound AI-era capability during the hold. The question is not whether the thesis works — it is the sequencing of compounding loops and the quality of execution.</p>
+            <p><strong>Observed posture:</strong> Conviction with patience; extending the lead.</p>
+            <p><strong>Typical cadence:</strong> Quarterly board review; monthly SOAR score refresh.</p>
           </div>
         </div>
 
@@ -1523,12 +1522,11 @@ function renderResults(company, result, meta) {
             <div class="answer-card-name">RACE MODE</div>
             <div class="answer-card-tag">High Threat · High Readiness</div>
           </div>
-          <div class="answer-card-thesis">"The thesis works, but the clock is ticking."</div>
+          <div class="answer-card-thesis">Foundations ready. Window compressing.</div>
           <div class="answer-card-body">
-            <p>The company can ship AI — but competitive pressure is forcing a faster pace than ideal. Foundations are there; execution discipline has to be 2x what it would be in EXECUTE. War-room cadence, parallel workstreams, ship over polish.</p>
-            <p><strong>Posture:</strong> Buy with urgency. Ship now. Speed over feature depth.</p>
-            <p><strong>Cadence:</strong> War-room weekly. Quarterly board cadence insufficient — monthly minimum.</p>
-            <p><strong>Portfolio pattern:</strong> Nymbl</p>
+            <p>The company has the foundations to ship AI-era capability, but the competitive window is compressing faster than an unhurried pace allows. Execution discipline becomes the binding constraint. Foundations are there; the gating factor is pace.</p>
+            <p><strong>Observed posture:</strong> Urgency with conviction; speed over feature depth.</p>
+            <p><strong>Typical cadence:</strong> War-room weekly; monthly board minimum.</p>
           </div>
         </div>
 
@@ -1538,12 +1536,11 @@ function renderResults(company, result, meta) {
             <div class="answer-card-name">BUILD MODE</div>
             <div class="answer-card-tag">Low Threat · Low Readiness</div>
           </div>
-          <div class="answer-card-thesis">"The thesis requires patience."</div>
+          <div class="answer-card-thesis">Moat intact. Foundations emerging.</div>
           <div class="answer-card-body">
-            <p>The moat is real — you have time. But the foundations for AI (data, architecture, team) aren't there yet. This is a legitimate, deliberate state — NOT a problem. Many great companies START in BUILD MODE and migrate to EXECUTE during the hold. Foundations first, features second.</p>
-            <p><strong>Posture:</strong> Buy with discipline. Fix foundations before shipping AI features.</p>
-            <p><strong>Cadence:</strong> Foundation sprints. Quarterly readiness re-scoring. Careful not to ship AI on broken data.</p>
-            <p><strong>Portfolio pattern:</strong> Albi</p>
+            <p>The moat gives the company time; the foundations for AI (data, architecture, team) are still emerging. This is a legitimate, deliberate state — many companies begin in BUILD MODE and migrate to EXECUTE during the hold. Foundations precede features.</p>
+            <p><strong>Observed posture:</strong> Disciplined patience; fixing foundations before shipping AI.</p>
+            <p><strong>Typical cadence:</strong> Foundation sprints; quarterly readiness re-scoring.</p>
           </div>
         </div>
 
@@ -1553,12 +1550,11 @@ function renderResults(company, result, meta) {
             <div class="answer-card-name">DANGER ZONE</div>
             <div class="answer-card-tag">High Threat · Low Readiness</div>
           </div>
-          <div class="answer-card-thesis">"The thesis doesn't work inside the hold."</div>
+          <div class="answer-card-thesis">Pressure outpacing feasible execution.</div>
           <div class="answer-card-body">
-            <p>Competitive pressure is high AND the company can't respond fast enough. By the time foundations are ready, the window will have closed. AQL, by construction, does not invest here. If an existing portfolio company drifts into DANGER ZONE, trigger fundamental thesis review.</p>
-            <p><strong>Posture:</strong> Do not buy. If holding, re-underwrite or exit.</p>
-            <p><strong>Cadence:</strong> Immediate thesis review. Weekly until resolved.</p>
-            <p><strong>Portfolio pattern:</strong> None — zero DANGER ZONE companies in AQL portfolio by construction.</p>
+            <p>Competitive pressure is high and feasible execution speed is low. By the time foundations mature, the window will likely have closed. AQL, by construction, does not originate deals here. Existing holdings that drift into this quadrant warrant fundamental thesis review.</p>
+            <p><strong>Observed posture:</strong> Re-underwrite or exit.</p>
+            <p><strong>Typical cadence:</strong> Immediate thesis review; weekly until resolved.</p>
           </div>
         </div>
       </div>
