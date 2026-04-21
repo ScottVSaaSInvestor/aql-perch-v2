@@ -897,7 +897,7 @@ strong { font-weight: 600; color: var(--ink); }
   line-height: 1.55;
 }
 
-/* THE SPECTRUM — horizontal track from current → 100 */
+/* THE SPECTRUM — clean track above, grid of journey cards below */
 .spectrum-section {
   margin: 20pt 0 8pt;
   page-break-inside: avoid;
@@ -921,62 +921,78 @@ strong { font-weight: 600; color: var(--ink); }
 
 .spectrum {
   position: relative;
-  height: 76pt;
-  margin: 20pt 0 48pt;
-  padding: 0 8pt;
+  padding: 32pt 0 0;
+  margin-bottom: 18pt;
 }
 
-/* Track background */
+.spectrum-current-float {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  text-align: center;
+  z-index: 3;
+}
+.spectrum-current-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18pt;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+}
+.spectrum-current-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6.5pt;
+  letter-spacing: 0.22em;
+  color: var(--teal-bright);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 3pt;
+}
+
 .spectrum-track {
   position: relative;
-  height: 10pt;
+  height: 12pt;
   background: rgba(255,255,255,0.06);
-  border-radius: 5pt;
+  border-radius: 6pt;
   overflow: visible;
+  margin-top: 8pt;
 }
-
-/* Filled portion (current score) */
 .spectrum-fill {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   background: linear-gradient(to right, var(--teal-bright) 0%, var(--gold-bright) 100%);
-  border-radius: 5pt;
-  box-shadow: 0 0 12pt rgba(45, 212, 191, 0.35);
+  border-radius: 6pt;
+  box-shadow: 0 0 10pt rgba(45, 212, 191, 0.3);
 }
-
-/* Target zone at 100 — the SOA goal */
 .spectrum-goal-marker {
   position: absolute;
-  right: -2pt;
-  top: -10pt;
-  bottom: -10pt;
-  width: 3pt;
+  right: -3pt;
+  top: -6pt;
+  bottom: -6pt;
+  width: 4pt;
   background: var(--gold-bright);
+  border-radius: 1pt;
+  box-shadow: 0 0 8pt var(--gold-bright);
 }
-.spectrum-goal-label {
+.spectrum-way-pin {
   position: absolute;
-  right: 0;
-  top: -28pt;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 7.5pt;
-  letter-spacing: 0.2em;
-  color: var(--gold-bright);
-  font-weight: 700;
-  text-transform: uppercase;
-  text-align: right;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8pt;
+  height: 8pt;
+  background: var(--gold-bright);
+  border: 1.5pt solid var(--navy);
+  border-radius: 50%;
+  z-index: 2;
 }
 
-/* Tick marks every 25 */
-.spectrum-ticks {
-  position: absolute;
-  top: 16pt;
-  left: 0;
-  right: 0;
+.spectrum-tick-row {
   display: flex;
   justify-content: space-between;
-  pointer-events: none;
+  padding: 10pt 0 0;
 }
 .spectrum-tick {
   font-family: 'JetBrains Mono', monospace;
@@ -984,93 +1000,63 @@ strong { font-weight: 600; color: var(--ink); }
   color: var(--ink-faint);
   letter-spacing: 0.08em;
 }
-
-/* Current position marker */
-.spectrum-current {
-  position: absolute;
-  top: -22pt;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  text-align: center;
-}
-.spectrum-current-value {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20pt;
-  font-weight: 500;
-  color: #fff;
-  line-height: 1;
-}
-.spectrum-current-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 7pt;
-  letter-spacing: 0.22em;
-  color: var(--teal-bright);
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-top: 2pt;
-}
-.spectrum-current-pin {
-  position: absolute;
-  top: 40pt;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2pt;
-  height: 14pt;
-  background: var(--teal-bright);
-  border-radius: 1pt;
-}
-
-/* Milestone waypoints along the track */
-.spectrum-waypoint {
-  position: absolute;
-  transform: translateX(-50%);
-  text-align: center;
-  max-width: 1.4in;
-}
-.spectrum-waypoint-pin {
-  position: absolute;
-  top: 0pt;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 10pt;
-  height: 10pt;
-  background: var(--gold-bright);
-  border: 2px solid var(--navy);
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--gold-bright);
-}
-.spectrum-waypoint-target {
-  position: absolute;
-  top: -18pt;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
+.spectrum-tick.soa {
   color: var(--gold-bright);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
 }
-.spectrum-waypoint-content {
-  position: absolute;
-  top: 20pt;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1.4in;
+
+/* Journey cards — grid below the spectrum, no overlap possible */
+.journey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(1.4in, 1fr));
+  gap: 10pt;
+  margin-top: 16pt;
 }
-.spectrum-waypoint-month {
+.journey-card {
+  padding: 12pt 14pt;
+  background: rgba(255,255,255,0.03);
+  border-top: 2pt solid var(--gold-bright);
+  border-radius: 3pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.journey-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6pt;
+  border-bottom: 0.5pt solid var(--rule);
+  padding-bottom: 5pt;
+}
+.journey-card-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16pt;
+  font-weight: 600;
+  color: var(--gold-bright);
+  line-height: 1;
+}
+.journey-card-target {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--teal-bright);
+  letter-spacing: 0.05em;
+}
+.journey-card-month {
   font-family: 'JetBrains Mono', monospace;
   font-size: 7pt;
-  color: var(--teal-bright);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
+  color: var(--ink-muted);
   text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 3pt;
-}
-.spectrum-waypoint-title {
-  font-size: 8.5pt;
-  color: var(--ink-soft);
-  line-height: 1.3;
   font-weight: 600;
+  margin-bottom: 5pt;
+}
+.journey-card-title {
+  font-size: 9pt;
+  color: var(--ink-soft);
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 /* Milestone narrative cards — below the spectrum */
@@ -1780,26 +1766,18 @@ function fmtDateShort(d) {
 // BUILD THE PATH-TO-SOA SPECTRUM
 // ============================================================
 function renderSpectrum(currentScore, milestones, maxScore = 100, type = 'readiness') {
-  // currentScore is e.g. 66.2; waypoints placed at percentages along the track
-  // We derive waypoint target positions from the milestone list — each milestone
-  // represents progress toward SOA. Simple heuristic: distribute remaining
-  // progress (100 - currentScore) across milestones based on their target_month.
-  //
-  // If milestones have an implied target_score field, use it. Otherwise,
-  // distribute linearly: milestone N lands at currentScore + (100-currentScore) * (N / totalMilestones)
   const current = Math.max(0, Math.min(100, currentScore));
   const sortedMs = [...milestones].sort((a, b) => (a.number || 0) - (b.number || 0));
   const totalMs = sortedMs.length;
 
   const waypoints = sortedMs.map((m, i) => {
-    // Heuristic target position along spectrum
     const progress = (i + 1) / totalMs;
     const target = Math.min(100, current + (100 - current) * progress);
     return {
       target: Math.round(target),
       month: m.target_month || '?',
       number: m.number || (i + 1),
-      title: m.milestone ? (m.milestone.length > 60 ? m.milestone.slice(0, 57).trim() + '…' : m.milestone) : ''
+      title: m.milestone ? (m.milestone.length > 80 ? m.milestone.slice(0, 77).trim() + '…' : m.milestone) : ''
     };
   });
 
@@ -1808,35 +1786,38 @@ function renderSpectrum(currentScore, milestones, maxScore = 100, type = 'readin
   let html = `
     <div class="spectrum-section">
       <div class="spectrum-title">Path to SOA · Readiness Spectrum</div>
-      <div class="spectrum-subtitle">Readiness of 100 = full System of Action — outcome-tier pricing, compounding AI loop in production, durable ARPU expansion. Current position and milestone waypoints below.</div>
+      <div class="spectrum-subtitle">Readiness of 100 = full System of Action — outcome-tier pricing, compounding AI loop in production, durable ARPU expansion. Current position tracked on the spectrum. Milestones below.</div>
+
       <div class="spectrum">
+        <div class="spectrum-current-float" style="left: ${fillPct}%;">
+          <div class="spectrum-current-value">${current.toFixed(1)}</div>
+          <div class="spectrum-current-label">You Are Here</div>
+        </div>
         <div class="spectrum-track">
           <div class="spectrum-fill" style="width: ${fillPct}%;"></div>
+          ${waypoints.map(w => `<div class="spectrum-way-pin" style="left: ${w.target}%;" title="Milestone ${w.number}: target ${w.target}"></div>`).join('')}
           <div class="spectrum-goal-marker"></div>
-          <div class="spectrum-goal-label">SOA · 100</div>
-          <div class="spectrum-ticks">
-            <span class="spectrum-tick">0</span>
-            <span class="spectrum-tick">25</span>
-            <span class="spectrum-tick">50</span>
-            <span class="spectrum-tick">75</span>
-            <span class="spectrum-tick">100</span>
-          </div>
-          <div class="spectrum-current" style="left: ${fillPct}%;">
-            <div class="spectrum-current-value">${current.toFixed(1)}</div>
-            <div class="spectrum-current-label">You Are Here</div>
-          </div>
-          <div class="spectrum-current-pin" style="left: ${fillPct}%;"></div>
-          ${waypoints.map(w => `
-            <div class="spectrum-waypoint" style="left: ${w.target}%;">
-              <div class="spectrum-waypoint-target">· ${w.target} ·</div>
-              <div class="spectrum-waypoint-pin"></div>
-              <div class="spectrum-waypoint-content">
-                <div class="spectrum-waypoint-month">M${w.month} · ${w.number}</div>
-                <div class="spectrum-waypoint-title">${esc(w.title)}</div>
-              </div>
-            </div>
-          `).join('')}
         </div>
+        <div class="spectrum-tick-row">
+          <span class="spectrum-tick">0</span>
+          <span class="spectrum-tick">25</span>
+          <span class="spectrum-tick">50</span>
+          <span class="spectrum-tick">75</span>
+          <span class="spectrum-tick soa">SOA · 100</span>
+        </div>
+      </div>
+
+      <div class="journey-grid">
+        ${waypoints.map(w => `
+          <div class="journey-card">
+            <div class="journey-card-top">
+              <span class="journey-card-num">M${w.number}</span>
+              <span class="journey-card-target">→ ${w.target}</span>
+            </div>
+            <div class="journey-card-month">Target: Month ${w.month}</div>
+            <div class="journey-card-title">${esc(w.title)}</div>
+          </div>
+        `).join('')}
       </div>
     </div>
   `;
@@ -1858,7 +1839,7 @@ function renderReport(payload) {
   document.getElementById('toolbar-subject').textContent = company.name;
   document.title = `PERCH · ${company.name} · AQL Growth IC Report`;
 
-  const totalPages = 9;
+  const totalPages = 10;
 
   const pageHeader = (subject, section, pageNum) => `
     <div class="page-header">
@@ -2029,26 +2010,18 @@ function renderReport(payload) {
         </div>
         <div class="q-cell q1 ${quadrant.id === 'q1' ? 'active' : ''}">
           <div class="q-cell-name">EXECUTE</div>
-          <div class="q-cell-tag">Low Threat · High Readiness</div>
-          <div class="q-cell-tagline">Moat intact. Foundations ready.</div>
           <div class="q-cell-marker">◆ ${esc(company.name)}</div>
         </div>
         <div class="q-cell q3 ${quadrant.id === 'q3' ? 'active' : ''}">
           <div class="q-cell-name">RACE MODE</div>
-          <div class="q-cell-tag">High Threat · High Readiness</div>
-          <div class="q-cell-tagline">Foundations ready. Window compressing.</div>
           <div class="q-cell-marker">◆ ${esc(company.name)}</div>
         </div>
         <div class="q-cell q2 ${quadrant.id === 'q2' ? 'active' : ''}">
           <div class="q-cell-name">BUILD MODE</div>
-          <div class="q-cell-tag">Low Threat · Low Readiness</div>
-          <div class="q-cell-tagline">Moat intact. Foundations emerging.</div>
           <div class="q-cell-marker">◆ ${esc(company.name)}</div>
         </div>
         <div class="q-cell q4 ${quadrant.id === 'q4' ? 'active' : ''}">
           <div class="q-cell-name">DANGER ZONE</div>
-          <div class="q-cell-tag">High Threat · Low Readiness</div>
-          <div class="q-cell-tagline">Pressure outpacing execution.</div>
           <div class="q-cell-marker">◆ ${esc(company.name)}</div>
         </div>
       </div>
@@ -2251,35 +2224,47 @@ function renderReport(payload) {
     </div>
   `;
 
-  // ============= PAGE 8 — BRIDGE FOCUS =============
+  // ============= PAGE 8 — BRIDGE · PRIORITIES =============
   const bridgePage = `
     <div class="page content">
       ${pageHeader(company.name, 'Bridge Focus', 8)}
-      ${sectionMarker(8, 'Bridge Focus · Monitoring')}
-      <h1>Bridge &amp; Monitoring</h1>
-      <p class="lede">Where the Bridge concentrates attention, and what observable events would force re-underwrite.</p>
+      ${sectionMarker(8, 'Bridge Focus · Priorities')}
+      <h1>Bridge Focus</h1>
+      <p class="lede">Where the Bridge concentrates attention during the hold — sequenced by what unlocks the SOA path fastest.</p>
 
       <h3>Gap-to-Target Priorities</h3>
-      <p style="font-size: 9pt; color: var(--ink-muted); margin-bottom: 8pt; font-style: italic;">Sequenced by what unlocks the SOA path fastest.</p>
+      <p style="font-size: 9pt; color: var(--ink-muted); margin-bottom: 10pt; font-style: italic;">Each priority tied to the readiness gap it closes and the feasibility window it operates within.</p>
       <ol class="priority-list">
         ${(result.gap_to_target || []).map(g => `<li>${esc(g)}</li>`).join('')}
       </ol>
-
-      <h3>Threshold Triggers</h3>
-      <p style="font-size: 9pt; color: var(--ink-muted); margin-bottom: 8pt; font-style: italic;">Observable events that would force re-underwrite. SOAR watches quarterly.</p>
-      <ul class="trigger-list">
-        ${(result.threshold_triggers || []).map(t => `<li>${esc(t)}</li>`).join('')}
-      </ul>
 
       ${pageFooter(8)}
     </div>
   `;
 
-  // ============= PAGE 9 — EVIDENCE + METHODOLOGY =============
+  // ============= PAGE 9 — MONITORING · THRESHOLD TRIGGERS =============
+  const monitoringPage = `
+    <div class="page content">
+      ${pageHeader(company.name, 'Monitoring', 9)}
+      ${sectionMarker(9, 'Monitoring · Threshold Triggers')}
+      <h1>Monitoring</h1>
+      <p class="lede">Observable events that would force re-underwrite. SOAR watches these quarterly — any trigger firing prompts a mid-hold re-score and thesis review.</p>
+
+      <h3>Threshold Triggers</h3>
+      <p style="font-size: 9pt; color: var(--ink-muted); margin-bottom: 10pt; font-style: italic;">Each trigger names the event, the factor it would shift, and the magnitude of that shift.</p>
+      <ul class="trigger-list">
+        ${(result.threshold_triggers || []).map(t => `<li>${esc(t)}</li>`).join('')}
+      </ul>
+
+      ${pageFooter(9)}
+    </div>
+  `;
+
+  // ============= PAGE 10 — EVIDENCE + METHODOLOGY =============
   const closingPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Evidence · Audit', 9)}
-      ${sectionMarker(9, 'Evidence · Confidence · Audit')}
+      ${pageHeader(company.name, 'Evidence · Audit', 10)}
+      ${sectionMarker(10, 'Evidence · Confidence · Audit')}
       <h1>Evidence &amp; Audit</h1>
       <p class="lede">The primary sources anchoring this scoring, the confidence read, and full methodology detail for partner inspection.</p>
 
@@ -2329,14 +2314,14 @@ function renderReport(payload) {
         Generated by Eagle Vision · PERCH on ${esc(fmtDate(generatedAt))}. Point-in-time assessment based on evidence available at run time. Scores and posture may shift as new evidence emerges or as the company executes. Distribution limited to AQL Growth partners and authorized recipients.
       </div>
 
-      ${pageFooter(9)}
+      ${pageFooter(10)}
     </div>
   `;
 
   document.getElementById('root').innerHTML =
     coverPage + execSummaryPage + posturePage + quadrantPage +
     soaPathPage + milestoneDetailPage +
-    riskFactorPage + readinessFactorPage + bridgePage + closingPage;
+    riskFactorPage + readinessFactorPage + bridgePage + monitoringPage + closingPage;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
