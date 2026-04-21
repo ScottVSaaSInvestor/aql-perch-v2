@@ -381,6 +381,31 @@ tbody tr:last-child td { border-bottom: none; }
 }
 .action-btn:hover { background: rgba(45, 212, 191, 0.1); border-color: var(--teal-bright); }
 
+.delete-btn {
+  padding: 5px 10px;
+  background: transparent;
+  color: rgba(239, 68, 68, 0.75);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-left: 6px;
+}
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border-color: var(--red);
+}
+.delete-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
 /* Empty + loading states */
 .state-card {
   text-align: center;
@@ -615,6 +640,31 @@ function switchView(view) {
   loadData();
 }
 
+// Delete a run from the corpus. Uses confirm() — no fancy modal needed.
+async function deleteRun(runId, companyName, btn) {
+  const ok = window.confirm(
+    'Delete this run for ' + companyName + '?\n\n' +
+    'This cannot be undone. If this is the company\'s only run, the company will also be removed from the dashboard.'
+  );
+  if (!ok) return;
+
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    const r = await fetch('/api/runs/' + encodeURIComponent(runId), { method: 'DELETE' });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({ error: 'HTTP ' + r.status }));
+      throw new Error(err.error || 'Delete failed');
+    }
+    // Reload the dashboard so stats + table refresh
+    await loadStats();
+    await loadData();
+  } catch (err) {
+    alert('Delete failed: ' + err.message);
+    if (btn) { btn.disabled = false; btn.textContent = '✕ DELETE'; }
+  }
+}
+
 function applyFilters() {
   currentFilters = {
     quadrant: document.getElementById('filter-quadrant').value,
@@ -741,6 +791,7 @@ function renderCompanies(data) {
               <td class="date-cell">${fmtDate(c.last_run_at)}</td>
               <td class="actions-cell">
                 <button class="action-btn" onclick="event.stopPropagation(); window.open('/report.html?run_id=${c.latest_run_id}', '_blank')">↗ Open</button>
+                <button class="delete-btn" onclick="event.stopPropagation(); deleteRun(${c.latest_run_id}, ${JSON.stringify(c.name).replace(/"/g, '&quot;')}, this)" title="Delete latest run">✕ DELETE</button>
               </td>
             </tr>
           `).join('')}
@@ -801,6 +852,7 @@ function renderRuns(data) {
               <td class="date-cell">${fmtDate(r.created_at)}</td>
               <td class="actions-cell">
                 <button class="action-btn" onclick="event.stopPropagation(); window.open('/report.html?run_id=${r.id}', '_blank')">↗ Open</button>
+                <button class="delete-btn" onclick="event.stopPropagation(); deleteRun(${r.id}, ${JSON.stringify(r.company_name).replace(/"/g, '&quot;')}, this)" title="Delete this run">✕ DELETE</button>
               </td>
             </tr>
           `).join('')}
