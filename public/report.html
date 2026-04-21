@@ -581,6 +581,55 @@ strong { font-weight: 600; color: var(--ink); }
   line-height: 1.35;
 }
 
+/* Wave-tops strip — 4 tiles under hero scores, weighted columns */
+.wave-tops {
+  display: grid;
+  grid-template-columns: 0.85fr 1.4fr 1.4fr 0.85fr;
+  gap: 10pt;
+  margin: 14pt 0 14pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.wave-tile {
+  padding: 10pt 12pt;
+  background: rgba(255,255,255,0.03);
+  border-radius: 3pt;
+  border-top: 1.5pt solid var(--rule);
+  position: relative;
+}
+.wave-tile.posture { border-top-color: var(--gold-bright); }
+.wave-tile.upside { border-top-color: var(--green); }
+.wave-tile.risk-watch { border-top-color: var(--amber); }
+.wave-tile.confidence { border-top-color: var(--teal-bright); }
+.wave-tile-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 700;
+  margin-bottom: 5pt;
+}
+.wave-tile.posture .wave-tile-label { color: var(--gold-bright); }
+.wave-tile.upside .wave-tile-label { color: var(--green); }
+.wave-tile.risk-watch .wave-tile-label { color: var(--amber); }
+.wave-tile.confidence .wave-tile-label { color: var(--teal-bright); }
+.wave-tile-head {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14pt;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 3pt;
+}
+.wave-tile-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 8pt;
+  color: var(--ink-soft);
+  line-height: 1.4;
+  font-style: italic;
+}
+
 .analytical-read {
   margin: 16pt 0 14pt;
   padding: 18pt 22pt;
@@ -1723,6 +1772,15 @@ function esc(text) {
   return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+function truncateAtWord(text, maxLen) {
+  if (!text) return '';
+  const s = String(text).trim();
+  if (s.length <= maxLen) return s;
+  const cut = s.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim() + '…';
+}
+
 function loadPayload() {
   const params = new URLSearchParams(window.location.search);
   const key = params.get('id') || 'perch_last_report';
@@ -1934,6 +1992,27 @@ function renderReport(payload) {
           <div class="hero-score-value">${esc(quadrant.name)}</div>
           <div class="hero-quadrant-sub">${esc(quadrant.sub)}</div>
           <div class="hero-quadrant-tagline">${esc(quadrant.tagline)}</div>
+        </div>
+      </div>
+
+      <div class="wave-tops">
+        <div class="wave-tile posture">
+          <div class="wave-tile-label">Partner Posture</div>
+          <div class="wave-tile-head">${esc(result.partner_posture?.posture || '—')}</div>
+          <div class="wave-tile-sub">${esc(result.partner_posture?.conviction || '—')} Conviction</div>
+        </div>
+        <div class="wave-tile upside">
+          <div class="wave-tile-label">Biggest Upside Lever</div>
+          <div class="wave-tile-sub" style="font-style: normal; color: var(--ink); font-size: 9pt; line-height: 1.45;">${esc(truncateAtWord(result.partner_posture?.biggest_upside_lever || '—', 160))}</div>
+        </div>
+        <div class="wave-tile risk-watch">
+          <div class="wave-tile-label">Biggest Risk to Monitor</div>
+          <div class="wave-tile-sub" style="font-style: normal; color: var(--ink); font-size: 9pt; line-height: 1.45;">${esc(truncateAtWord(result.partner_posture?.biggest_risk_to_monitor || '—', 160))}</div>
+        </div>
+        <div class="wave-tile confidence">
+          <div class="wave-tile-label">Evidence Confidence</div>
+          <div class="wave-tile-head">${esc(result.confidence_level || 'Moderate')}</div>
+          <div class="wave-tile-sub">Per research depth</div>
         </div>
       </div>
 
