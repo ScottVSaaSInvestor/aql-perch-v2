@@ -1506,6 +1506,19 @@ function loadPayload() {
   } catch (e) { console.error(e); return null; }
 }
 
+// Fetch a saved run from the corpus database by run_id.
+// Returns the payload shape that renderReport expects.
+async function loadPayloadFromDb(runId) {
+  const r = await fetch('/api/runs/' + encodeURIComponent(runId));
+  if (!r.ok) {
+    const errBody = await r.json().catch(() => ({ error: 'HTTP ' + r.status }));
+    throw new Error(errBody.error || 'Failed to load run');
+  }
+  const data = await r.json();
+  if (!data.payload) throw new Error('Run returned no payload');
+  return data.payload;
+}
+
 function renderEmptyState() {
   document.getElementById('root').innerHTML = `
     <div class="empty-state">
@@ -1992,8 +2005,33 @@ function renderReport(payload) {
     soaPathPage + riskFactorPage + readinessFactorPage + closingPage;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const payload = loadPayload();
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const runId = params.get('run_id');
+
+  let payload = null;
+  if (runId) {
+    // Loading a saved run from the corpus database
+    document.getElementById('root').innerHTML = `<div class="empty-state"><h2>Loading run #${runId}…</h2><p style="margin-top:14px;">Fetching from PERCH corpus.</p></div>`;
+    try {
+      payload = await loadPayloadFromDb(runId);
+    } catch (err) {
+      console.error('Failed to load run from DB:', err);
+      document.getElementById('root').innerHTML = `
+        <div class="empty-state">
+          <h2>Could not load run #${runId}</h2>
+          <p>${err.message || 'Unknown error'}. Try opening from the dashboard, or run a new analysis.</p>
+          <a href="/dashboard.html">← Back to Dashboard</a>
+        </div>
+      `;
+      document.querySelector('.toolbar').style.display = 'none';
+      return;
+    }
+  } else {
+    // Fall back to localStorage (handoff from index.html "Open IC Report" button)
+    payload = loadPayload();
+  }
+
   if (!payload || !payload.result || !payload.company) {
     renderEmptyState();
     return;
