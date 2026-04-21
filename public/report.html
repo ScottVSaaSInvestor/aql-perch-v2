@@ -1198,6 +1198,33 @@ strong { font-weight: 600; color: var(--ink); }
 }
 .blocker-text { font-size: 10pt; color: var(--ink-soft); line-height: 1.55; }
 
+.quadrant-drift-warning {
+  margin-top: 14pt;
+  padding: 14pt 18pt;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  border-left: 4pt solid var(--red);
+  border-radius: 3pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.quadrant-drift-warning-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 700;
+  margin-bottom: 6pt;
+}
+.quadrant-drift-warning-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11pt;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.5;
+}
+
 /* ============================================================
    TRAJECTORY PAGE (separate page for T0→T1)
    ============================================================ */
@@ -2209,6 +2236,13 @@ function renderReport(payload) {
         </div>
       </div>
       ${t12.trajectory_narrative ? `<div class="trajectory-narrative">${esc(t12.trajectory_narrative)}</div>` : ''}
+
+      ${t12.quadrant_drift_warning ? `
+        <div class="quadrant-drift-warning">
+          <div class="quadrant-drift-warning-label">⚠ Projected Quadrant Drift — Thesis-Degrading</div>
+          <div class="quadrant-drift-warning-text">${esc(t12.quadrant_drift_warning)}</div>
+        </div>
+      ` : ''}
 
       ${pageFooter(5)}
     </div>
