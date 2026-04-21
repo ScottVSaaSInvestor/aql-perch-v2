@@ -52,6 +52,9 @@ body {
 .brand-text div:first-child { color: #fff; font-weight: 600; }
 
 .version { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
+.header-right { display: flex; align-items: center; gap: 18px; }
+.header-nav-link { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; color: var(--gold-bright); text-transform: uppercase; text-decoration: none; padding: 8px 16px; border: 1px solid rgba(230, 197, 128, 0.35); border-radius: 3px; transition: all 0.15s; }
+.header-nav-link:hover { background: rgba(230, 197, 128, 0.1); border-color: rgba(230, 197, 128, 0.7); }
 
 .hero { margin-bottom: 56px; }
 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; color: var(--teal-bright); text-transform: uppercase; margin-bottom: 14px; }
@@ -285,6 +288,101 @@ textarea { min-height: 80px; resize: vertical; font-family: 'Inter', sans-serif;
   border-left: 3px solid rgba(201,169,97,0.35);
   border-radius: 3px;
 }
+
+/* ========== ANALYTICAL READ — Partner's Take ========== */
+.analytical-read {
+  margin: 20px 0 16px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.04) 0%, rgba(201, 169, 97, 0.06) 100%);
+  border: 1px solid rgba(230, 197, 128, 0.35);
+  border-radius: 6px;
+  position: relative;
+}
+.analytical-read::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--gold-bright), var(--teal-bright));
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.analytical-read-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(230, 197, 128, 0.18);
+}
+.analytical-read-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--gold-bright);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.analytical-read-peers {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.08em;
+}
+.analytical-read-peers strong {
+  color: var(--teal-bright);
+  font-weight: 600;
+}
+.analytical-read-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.94);
+  letter-spacing: 0.005em;
+  margin-bottom: 20px;
+}
+.analytical-read-subgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+.analytical-read-cell {
+  padding: 14px 16px;
+  background: rgba(10, 20, 36, 0.4);
+  border-radius: 4px;
+  border-top: 2px solid rgba(45, 212, 191, 0.4);
+}
+.analytical-read-cell:nth-child(2) {
+  border-top-color: rgba(230, 197, 128, 0.45);
+}
+.analytical-read-cell-binding {
+  border-top-color: rgba(239, 68, 68, 0.5) !important;
+}
+.analytical-read-cell-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.analytical-read-cell-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.85);
+}
+@media (max-width: 768px) {
+  .analytical-read { padding: 22px 20px; }
+  .analytical-read-body { font-size: 17px; }
+  .analytical-read-subgrid { grid-template-columns: 1fr; gap: 12px; }
+}
 .summary-block-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -379,6 +477,18 @@ textarea { min-height: 80px; resize: vertical; font-family: 'Inter', sans-serif;
 .posture-callout { padding: 24px 28px; background: rgba(74, 222, 128, 0.08); border-left: 3px solid var(--green); border-radius: 4px; margin-top: 16px; }
 .posture-callout-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--green); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
 .posture-callout-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; line-height: 1.5; color: #fff; }
+
+/* Delta banner — surfaces score history when a company is re-scored */
+.delta-banner { margin: 0 0 24px; padding: 20px 26px; background: linear-gradient(135deg, rgba(201, 169, 97, 0.08) 0%, rgba(45, 212, 191, 0.06) 100%); border: 1px solid rgba(230, 197, 128, 0.35); border-radius: 6px; border-left: 3px solid var(--gold-bright); }
+.delta-banner-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+.delta-banner-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; color: var(--gold-bright); text-transform: uppercase; font-weight: 700; }
+.delta-banner-pills { display: flex; gap: 8px; }
+.delta-pill { padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; font-weight: 600; border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); }
+.delta-pill.up { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
+.delta-pill.down { background: rgba(74, 222, 128, 0.12); color: #86efac; border-color: rgba(74, 222, 128, 0.3); }
+.delta-pill.up-good { background: rgba(74, 222, 128, 0.12); color: #86efac; border-color: rgba(74, 222, 128, 0.3); }
+.delta-pill.flat { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6); }
+.delta-banner-text { font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.88); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 16px; }
 
 /* ========== RUN DETAILS section (moved to back) ========== */
 .run-details-section {
@@ -544,6 +654,25 @@ details.run-details-section[open] .run-details-summary-toggle { transform: rotat
   .run-details-section .run-details-body { display: block !important; }
   .run-details-section { page-break-before: auto; }
 
+  /* Analytical Read in print */
+  .analytical-read {
+    background: #faf7f0 !important;
+    border: 1px solid #c9a961 !important;
+    page-break-inside: avoid;
+  }
+  .analytical-read::before { background: #c9a961 !important; }
+  .analytical-read-label { color: #b8942a !important; }
+  .analytical-read-peers { color: #666 !important; }
+  .analytical-read-peers strong { color: #0d9488 !important; }
+  .analytical-read-body { color: #0a1424 !important; }
+  .analytical-read-cell {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    border-top: 2px solid #0d9488 !important;
+  }
+  .analytical-read-cell-label { color: #666 !important; }
+  .analytical-read-cell-text { color: #222 !important; }
+
   /* Quadrant colors */
   .q-cell.q1 { border-left: 4px solid #16a34a !important; }
   .q-cell.q3 { border-left: 4px solid #d97706 !important; }
@@ -619,7 +748,10 @@ details.run-details-section[open] .run-details-summary-toggle { transform: rotat
         <div>PERCH · Eagle Vision</div>
       </div>
     </div>
-    <div class="version">v2026.04 · PARTNER EDITION</div>
+    <div class="header-right">
+      <a class="header-nav-link" href="/dashboard.html" title="Browse corpus of PERCH runs">📊 Dashboard</a>
+      <div class="version">v2026.04 · PARTNER EDITION</div>
+    </div>
   </div>
 
   <div class="hero">
@@ -1026,6 +1158,71 @@ function cycleLoadingMessages() {
   return interval;
 }
 
+// ============================================================
+// CORPUS PERSISTENCE
+// ------------------------------------------------------------
+// After a successful PERCH run, write it to the Postgres corpus
+// via POST /api/runs. If the backend detects a prior run for the
+// same company, it returns a delta narrative — we surface it
+// in the UI with a small banner under the hero scores.
+// ============================================================
+async function persistRunToCorpus(company, result, meta, documents) {
+  const documentMeta = (documents || []).map(d => ({
+    name: d.name,
+    type: d.type,
+    size: d.size || 0
+  }));
+
+  const response = await fetch('/api/runs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      company: {
+        name: company.name,
+        domain: company.domain,
+        vertical: company.vertical,
+        context: company.context
+      },
+      result: result,
+      meta: meta,
+      documents: documentMeta
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(err.error || 'Save failed');
+  }
+
+  const saveData = await response.json();
+  console.log('[PERCH] Run saved to corpus:', saveData.run_id);
+
+  // If this is a re-score, surface the delta narrative
+  if (saveData.is_re_score && saveData.delta) {
+    renderDeltaBanner(saveData.delta);
+  }
+  return saveData;
+}
+
+function renderDeltaBanner(delta) {
+  if (!delta || !delta.narrative) return;
+  const banner = document.createElement('div');
+  banner.className = 'delta-banner';
+  banner.innerHTML = `
+    <div class="delta-banner-header">
+      <span class="delta-banner-label">${delta.quadrant_changed ? '⚡ Quadrant Shift · Re-Score' : '↻ Re-Score · Placement Held'}</span>
+      <span class="delta-banner-pills">
+        <span class="delta-pill ${delta.risk_delta > 0 ? 'up' : delta.risk_delta < 0 ? 'down' : 'flat'}">Risk ${delta.risk_delta > 0 ? '+' : ''}${delta.risk_delta}</span>
+        <span class="delta-pill ${delta.readiness_delta > 0 ? 'up-good' : delta.readiness_delta < 0 ? 'down' : 'flat'}">Readiness ${delta.readiness_delta > 0 ? '+' : ''}${delta.readiness_delta}</span>
+      </span>
+    </div>
+    <div class="delta-banner-text">${escapeHtml(delta.narrative)}</div>
+  `;
+  // Insert right after the hero scores if they exist
+  const resultHeader = document.querySelector('.result-header');
+  if (resultHeader) resultHeader.insertAdjacentElement('afterend', banner);
+}
+
 async function runScreener() {
   hideError();
   const name = document.getElementById('company-name').value.trim();
@@ -1074,6 +1271,11 @@ async function runScreener() {
     clearInterval(loadingInterval);
     document.getElementById('loading').classList.remove('active');
     renderResults(company, data.result, data.meta);
+
+    // Auto-save to corpus database (non-blocking; render already happened)
+    persistRunToCorpus(company, data.result, data.meta, readyDocs).catch(err => {
+      console.warn('[PERCH] Auto-save to corpus failed (non-fatal):', err);
+    });
   } catch (error) {
     clearInterval(loadingInterval);
     document.getElementById('loading').classList.remove('active');
@@ -1187,6 +1389,40 @@ function renderResults(company, result, meta) {
           <div class="score-posture-sub">${escapeHtml(quadrant.tagline)}</div>
         </div>
       </div>
+
+      ${result.competitive_context ? `
+      <div class="analytical-read">
+        <div class="analytical-read-header">
+          <div class="analytical-read-label">Analytical Read — Partner's Take</div>
+          ${result.competitive_context.named_peers && result.competitive_context.named_peers.length ? `
+          <div class="analytical-read-peers">
+            vs. <strong>${result.competitive_context.named_peers.map(p => escapeHtml(p)).join('</strong> · <strong>')}</strong>
+          </div>
+          ` : ''}
+        </div>
+        <div class="analytical-read-body">${escapeHtml(result.competitive_context.analytical_read || '')}</div>
+        <div class="analytical-read-subgrid">
+          ${result.competitive_context.risk_narrative ? `
+          <div class="analytical-read-cell">
+            <div class="analytical-read-cell-label">Risk vs Peers</div>
+            <div class="analytical-read-cell-text">${escapeHtml(result.competitive_context.risk_narrative)}</div>
+          </div>
+          ` : ''}
+          ${result.competitive_context.readiness_narrative ? `
+          <div class="analytical-read-cell">
+            <div class="analytical-read-cell-label">Readiness vs Peers</div>
+            <div class="analytical-read-cell-text">${escapeHtml(result.competitive_context.readiness_narrative)}</div>
+          </div>
+          ` : ''}
+          ${result.competitive_context.binding_constraint_narrative ? `
+          <div class="analytical-read-cell analytical-read-cell-binding">
+            <div class="analytical-read-cell-label">Binding Constraint${result.competitive_context.binding_constraint_factor ? ` · ${escapeHtml(result.competitive_context.binding_constraint_factor)}` : ''}</div>
+            <div class="analytical-read-cell-text">${escapeHtml(result.competitive_context.binding_constraint_narrative)}</div>
+          </div>
+          ` : ''}
+        </div>
+      </div>
+      ` : ''}
 
       <div class="summary-block">
         <div class="summary-block-label">Company Summary</div>
