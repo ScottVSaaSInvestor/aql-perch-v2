@@ -133,6 +133,28 @@ STEP 5: BUILD THE SOA MILESTONE MAP. Given urgency (Risk) and feasible speed (Re
 STEP 6: WRITE THE JSON. This is the output. Do not skip this step. Do not end your turn without it.
 
 ============================================================
+⚠ COMPETITIVE CONTEXT — WHAT PARTNERS ACTUALLY READ ⚠
+============================================================
+
+The rolled-up scores (e.g. "Readiness 68") are measurements, not judgments. Partners read scores and immediately ask: "compared to whom?"
+
+Your job is to produce a competitive context paragraph that NAMES REAL COMPETITORS and positions the target against them on both axes. This is what turns the numeric output into partner-grade analysis.
+
+STRICT RULES FOR competitive_context:
+
+1. NAMED PEERS MUST BE REAL — surfaced from your live research. Do NOT invent names. If your research named Zingage, PointClickCare, AlayaCare, HCHB, etc. as competitors, use those exact names. If the research did not surface competitors, say so honestly in the narrative and pick 1-2 known category incumbents instead.
+
+2. DO NOT include the target company in the peer list. The peer list is WHO THE TARGET COMPETES WITH.
+
+3. The narratives must TAKE A POSITION. "PointClickCare has shipped more production AI agents than AxisCare" is a position. "Various competitors exist with varying AI postures" is not.
+
+4. The implication sentence is the partner's read. It should answer "so what" — what does the competitive position TELL US about how to act?
+
+5. If the competitive landscape research was thin, set evidence_confidence to "Low" and note the limitation in the implication. Don't fabricate confidence.
+
+============================================================
+
+============================================================
 AQL QUADRANT FRAMEWORK (canonical from Value Creation Manifesto)
 ============================================================
 
@@ -142,6 +164,125 @@ BUILD MODE (Low Threat + Low Readiness) — Foundations first, then AI. Time is 
 DANGER ZONE (High Threat + Low Readiness) — Evaluate thesis before proceeding.
 
 Thresholds: Readiness > 50 = High. Risk > 50 = High Threat.
+
+============================================================
+⚠ VERTICAL RISK TIER CLASSIFICATION (DO THIS FIRST) ⚠
+============================================================
+
+Before scoring any individual factor, classify the VERTICAL itself into one of three structural risk tiers. The vertical's intrinsic AI-disruption profile sets FLOORS for several Risk factors. A great SOR in a HIGH AI-RISK vertical is still riskier than a mediocre SOR in a LOW AI-RISK vertical.
+
+═══════════════════════════════════════════════════════════
+HIGH AI-RISK VERTICAL (apply floors to R1, R2, R3, R6)
+═══════════════════════════════════════════════════════════
+Signature:
+  • Generic or semi-generic workflows (CRM, field service, sales ops, marketing automation, project management)
+  • NO mandatory regulatory certifications (no HIPAA, EVV, FedRAMP, government payer rails, fiduciary licensing)
+  • 3+ named AI-native entrants visibly shipping product OR major incumbent investing $50M+ explicitly in AI features
+  • Plausible horizontal SaaS encroachment (Monday/ClickUp/HubSpot adding vertical templates is a credible threat)
+
+If HIGH AI-RISK, apply these MINIMUMS:
+  • R1 Competitive Window:        FLOOR = 65
+  • R2 AI-Native Entrant Threat:  FLOOR = 65
+  • R3 Incumbent AI Posture:      FLOOR = 55
+  • R6 Regulatory Moat Durability: FLOOR = 60
+
+You may score HIGHER than the floor if evidence warrants. Never score lower.
+
+Examples of HIGH AI-RISK verticals:
+  • Residential roofing CRM (Proline, JobNimbus, Roofr) — 5+ AI-native entrants, $330M incumbent AI investment, no regulatory protection
+  • Generic field service CRM
+  • Contractor/trade CRM without specialty regulatory rails
+  • Marketing automation platforms
+
+═══════════════════════════════════════════════════════════
+MODERATE AI-RISK VERTICAL (apply lighter floors)
+═══════════════════════════════════════════════════════════
+Signature:
+  • Vertical-specific workflows requiring domain knowledge
+  • Limited regulatory gates (industry guidelines but no federal mandates)
+  • 1-2 named AI-native entrants
+  • Incumbent investing modestly in AI
+
+If MODERATE, apply these MINIMUMS:
+  • R1: FLOOR = 40
+  • R2: FLOOR = 40
+  • R3: FLOOR = 35
+  • R6: FLOOR = 35
+
+Examples: accounting practice management (Financial Cents), dental practice management, veterinary practice management, creative ops
+
+═══════════════════════════════════════════════════════════
+LOW AI-RISK VERTICAL (no floor applied — score on merit)
+═══════════════════════════════════════════════════════════
+Signature:
+  • Mandatory regulatory certifications create hard barriers (HIPAA, EVV, Medicare/Medicaid billing, SOC 2 required by buyers, state-by-state compliance)
+  • Government-funded workflows (Medicaid, VA, Title IV)
+  • Life-safety, fiduciary, or clinical stakes
+  • High switching costs from regulatory re-certification, audit trails, or payer integrations
+
+If LOW AI-RISK, no floor applied — score factors on individual merit. R6 typically lands 10-25.
+
+Examples: home care (AxisCare — HIPAA + EVV + Medicaid in 50 states), behavioral health, K-12 SIS, EHR for skilled nursing
+
+═══════════════════════════════════════════════════════════
+TIER CLASSIFICATION OUTPUT (REQUIRED)
+═══════════════════════════════════════════════════════════
+In your final JSON, include a "vertical_risk_tier" field with:
+  • tier: "HIGH" | "MODERATE" | "LOW"
+  • rationale: 2-3 sentences naming the specific signature elements observed
+  • floors_applied: object listing which factor floors were applied (or "none — LOW tier")
+
+============================================================
+⚠ SCORING DIRECTION GUARDS (PREVENTING INVERSION ERRORS) ⚠
+============================================================
+
+Several Risk factor names create logical inversion traps. Read these carefully before scoring R5 and R6 specifically.
+
+R5 — Customer Switching Propensity
+The NAME describes the customer's behavior. The SCORE measures RISK to the platform.
+  HIGH switching propensity (customers can leave easily) = HIGH RISK to platform = HIGH score
+  LOW switching propensity (customers locked in) = LOW RISK to platform = LOW score
+  
+  Common error: Scoring "customers don't switch much" as if that means "low risk." Read the score as platform exposure, not customer behavior.
+  
+  Anchors:
+  • Implementation 6+ months, deep payer integrations, data hard to migrate → R5 = 15-30
+  • Implementation 4-8 weeks, data portable, free competitor tier exists → R5 = 55-75
+
+R6 — Regulatory Moat Durability
+The NAME describes how DURABLE the regulatory moat is. The SCORE measures RISK to the platform from REGULATORY EXPOSURE.
+  STRONG regulatory moat (HIPAA, EVV, FedRAMP all mandatory) = LOW RISK to platform = LOW score (10-25)
+  WEAK regulatory moat (no required certifications) = HIGH RISK to platform = HIGH score (60-80)
+
+  Common error (DO NOT MAKE): Scoring "low regulatory burden" as "low risk." This is INVERTED. Low burden means NO PROTECTION against entrants. Score it HIGH.
+  
+  Anchors:
+  • Home care (HIPAA + EVV across 50 states + Medicaid billing) → R6 = 15-25
+  • Accounting practice mgmt (some compliance, no federal mandate) → R6 = 35-50
+  • Roofing CRM (no required certs at all) → R6 = 65-80
+
+R3 — Incumbent AI Posture
+Position-dependent.
+  • If the company being scored IS the leading incumbent, low R3 means competitors are weak → low risk
+  • If the company being scored is a CHALLENGER, strong incumbent AI shipping = higher R3
+  • Read carefully which side of the table the target sits on.
+
+============================================================
+⚠ T0 → T1 PROJECTION DISCIPLINE ⚠
+============================================================
+
+The 12-month forward view (twelve_month_view) must follow these rules:
+
+1. RISK DRIFT CAP: Risk score should NOT drift more than +5 points unless the Bridge plan as written explicitly fails on a defending priority. If you project +6 or more, you must name the specific Bridge priority that fails and why.
+
+2. QUADRANT MIGRATION FLAG: If the projected T1 quadrant is WORSE than T0 quadrant (e.g., EXECUTE → RACE MODE, or RACE MODE → DANGER ZONE), this is a thesis-degrading event. You must:
+  • Add a "quadrant_drift_warning" field to twelve_month_view explaining WHY the Bridge as written permits this drift
+  • Suggest at least one acceleration option that would prevent the drift
+  • The Bridge plan should generally DEFEND the current quadrant, not walk into a worse one
+
+3. READINESS CLIMB ASSUMPTIONS: Readiness improvements in T1 must be tied to specific Bridge milestones with named owners or hires. Don't assume +10 readiness from "the team will execute."
+
+4. INTERNAL CONSISTENCY: The narrative paragraph must reconcile T0 quadrant + T1 quadrant + projected scores + Bridge sequencing. If they don't align, fix the scores or fix the narrative — don't ship contradictions.
 
 ============================================================
 RISK FACTORS (0-100, LOWER is better - less threat)
@@ -256,6 +397,11 @@ REMINDER: The parser reads your LAST text block. Anything you write before the f
     "A1": {"score": 0-100, "rationale": "3-4 sentence evidence-backed reasoning"},
     "A2": {...}, "A3": {...}, "A4": {...}, "A5": {...}, "A6": {...}, "A7": {...}, "A8": {...}, "A9": {...}
   },
+  "vertical_risk_tier": {
+    "tier": "HIGH / MODERATE / LOW",
+    "rationale": "2-3 sentences naming the specific signature elements observed (e.g. number of named AI-native entrants, presence/absence of regulatory mandates, incumbent AI investment level)",
+    "floors_applied": "Object listing which factor floors were applied. For HIGH: {R1: 65, R2: 65, R3: 55, R6: 60}. For MODERATE: {R1: 40, R2: 40, R3: 35, R6: 35}. For LOW: 'none — LOW tier'"
+  },
   "close_call_flag": {
     "is_close_call": true/false,
     "axis": "risk / readiness / both / none",
@@ -268,7 +414,8 @@ REMINDER: The parser reads your LAST text block. Anything you write before the f
     "projected_t1_readiness_score": 0-100,
     "projected_t1_posture": "EXECUTE / RACE MODE / BUILD MODE / DANGER ZONE",
     "trajectory_narrative": "3-4 sentences: projected 12-month arc, what moves, what the Bridge should focus on",
-    "key_assumptions": ["Assumption 1", "Assumption 2", "Assumption 3"]
+    "key_assumptions": ["Assumption 1", "Assumption 2", "Assumption 3"],
+    "quadrant_drift_warning": "REQUIRED IF projected_t1_posture is WORSE than current_posture (e.g. EXECUTE → RACE MODE). 2-3 sentences explaining why the Bridge as written permits this drift, plus at least one acceleration option that would prevent it. If no drift, set to null."
   },
   "threshold_triggers": [
     "Observable event + projected factor impact",
@@ -300,6 +447,15 @@ REMINDER: The parser reads your LAST text block. Anything you write before the f
     "biggest_upside_lever": "one sentence",
     "biggest_risk_to_monitor": "one sentence",
     "cadence_recommendation": "one sentence on review cadence given quadrant placement"
+  },
+  "competitive_context": {
+    "named_peers": ["2-3 real competitor names surfaced from research, e.g. 'PointClickCare', 'HCHB', 'AlayaCare'"],
+    "evidence_confidence": "High / Moderate / Low — how well-named the competitors are from research",
+    "risk_narrative": "ONE sentence: how does the target's Risk (urgency) compare to named peers? Take a position. Example: 'More protected than PointClickCare on regulatory moat due to heavier EVV compliance depth; comparable to HCHB on switching costs.'",
+    "readiness_narrative": "ONE sentence: how does the target's Readiness (feasible speed) compare to named peers? Take a position. Example: 'AxisCare lags PointClickCare and AlayaCare on shipped AI features but leads HCHB on modern multi-tenant architecture.'",
+    "binding_constraint_factor": "The single factor ID (e.g. 'A6') that is the biggest drag on the Readiness score — where the company is furthest from best-in-class",
+    "binding_constraint_narrative": "ONE sentence explaining the binding constraint and what would unlock it. Example: 'A6 (AI/ML Team Capability, 52) is the binding constraint — closing the VP Product hire would unlock CTO bandwidth and project +6 pts to Readiness.'",
+    "analytical_read": "THE PARTNER'S READ — 3-4 sentences combining all of the above into a paragraph a partner would literally say out loud at IC. Must name at least one competitor by name. Must state whether the score is good/bad/middling FOR THIS CATEGORY AT THIS STAGE. Must identify the binding gap. Example: 'AxisCare sits in EXECUTE with one of the most protected verticals in the portfolio — LOW THREAT at 29.7 reflects substitution-resistant workflows the horizontal AI players can\\'t replicate. Readiness at 68.4 is solid but lower-end for EXECUTE; the gap is concentrated in AI execution capability (A6 · 52), not foundation quality. Competitors like PointClickCare and AlayaCare are shipping agentic workflows ahead of AxisCare, but they don\\'t have a deeper category moat — the gap is in execution pace, not category position. The thesis works; closing the VP Product hire is the single highest-leverage move.'"
   }
 }
 
