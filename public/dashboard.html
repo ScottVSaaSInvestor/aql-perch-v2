@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AQL Growth · PERCH Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0a1424;
+  --navy-card: #17263d;
+  --navy-mid: #0f1b2d;
+  --gold: #c9a961;
+  --gold-bright: #e6c580;
+  --teal: #0d9488;
+  --teal-bright: #2dd4bf;
+  --green: #4ade80;
+  --amber: #f0b73d;
+  --red: #ef4444;
+  --ink: rgba(255, 255, 255, 0.94);
+  --ink-soft: rgba(255, 255, 255, 0.78);
+  --ink-muted: rgba(255, 255, 255, 0.55);
+  --ink-faint: rgba(255, 255, 255, 0.35);
+  --rule: rgba(255, 255, 255, 0.1);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--navy); color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; line-height: 1.55;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  background-image:
+    radial-gradient(ellipse at top left, rgba(13, 148, 136, 0.08), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(201, 169, 97, 0.06), transparent 55%);
+}
+
+.app { max-width: 1360px; margin: 0 auto; padding: 28px 32px 80px; }
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 28px;
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 500; color: var(--gold-bright); line-height: 1; }
+.brand-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; color: var(--ink-soft); text-transform: uppercase; }
+.brand-text div:first-child { color: #fff; font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 22px; }
+.header-nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--teal-bright);
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  border-radius: 3px;
+  transition: all 0.15s;
+  font-weight: 600;
+}
+.header-nav-link:hover { background: rgba(45, 212, 191, 0.1); border-color: var(--teal-bright); }
+.version { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--ink-faint); text-transform: uppercase; }
+
+/* Hero */
+.hero { margin-bottom: 36px; }
+.kicker { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.28em; color: var(--teal-bright); text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 48px; line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 12px; color: #fff; }
+h1 em { color: var(--gold-bright); font-style: italic; }
+.subtitle { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--ink-soft); line-height: 1.5; max-width: 720px; }
+
+/* Distribution stats */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.stat {
+  padding: 20px 22px;
+  background: var(--navy-card);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--ink-muted);
+}
+.stat.total::before { background: var(--gold-bright); }
+.stat.execute::before { background: var(--green); }
+.stat.race::before { background: var(--amber); }
+.stat.build::before { background: var(--teal-bright); }
+.stat.danger::before { background: var(--red); }
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.stat.execute .stat-label { color: var(--green); }
+.stat.race .stat-label { color: var(--amber); }
+.stat.build .stat-label { color: var(--teal-bright); }
+.stat.danger .stat-label { color: var(--red); }
+.stat.total .stat-label { color: var(--gold-bright); }
+.stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1;
+  color: #fff;
+}
+
+/* View toggle */
+.view-toggle {
+  display: flex;
+  gap: 0;
+  background: var(--navy-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 4px;
+  margin-bottom: 22px;
+  width: fit-content;
+}
+.view-toggle button {
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--ink-muted);
+  border: none;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.view-toggle button.active {
+  background: var(--gold-bright);
+  color: var(--navy);
+}
+.view-toggle button:not(.active):hover { color: var(--ink); }
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+}
+.filter-group { display: flex; flex-direction: column; gap: 4px; }
+.filter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.filter-select, .filter-input {
+  padding: 8px 12px;
+  background: var(--navy-mid);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  min-width: 140px;
+}
+.filter-select:focus, .filter-input:focus {
+  outline: none;
+  border-color: var(--teal-bright);
+}
+.filter-btn {
+  padding: 9px 18px;
+  background: var(--gold-bright);
+  color: var(--navy);
+  border: none;
+  border-radius: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background 0.15s;
+}
+.filter-btn:hover { background: var(--gold); }
+.filter-clear {
+  background: transparent;
+  color: var(--ink-muted);
+  border: 1px solid var(--rule);
+  padding: 9px 14px;
+  border-radius: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: all 0.15s;
+}
+.filter-clear:hover { color: var(--ink); border-color: var(--ink-muted); }
+
+/* Table */
+.table-wrap {
+  background: var(--navy-card);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  overflow: hidden;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead {
+  background: var(--navy-mid);
+}
+th {
+  text-align: left;
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+  color: var(--ink-soft);
+  vertical-align: middle;
+}
+tbody tr { transition: background 0.12s; cursor: pointer; }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+tbody tr:last-child td { border-bottom: none; }
+
+.company-name-cell {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+.company-domain-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+.vertical-cell {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.score-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.score-pill.risk { background: rgba(45, 212, 191, 0.1); color: var(--teal-bright); border: 1px solid rgba(45, 212, 191, 0.25); }
+.score-pill.readiness { background: rgba(230, 197, 128, 0.1); color: var(--gold-bright); border: 1px solid rgba(230, 197, 128, 0.25); }
+
+.quadrant-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.quadrant-badge.execute { background: rgba(74, 222, 128, 0.12); color: var(--green); border: 1px solid rgba(74, 222, 128, 0.3); }
+.quadrant-badge.race { background: rgba(240, 183, 61, 0.12); color: var(--amber); border: 1px solid rgba(240, 183, 61, 0.3); }
+.quadrant-badge.build { background: rgba(45, 212, 191, 0.12); color: var(--teal-bright); border: 1px solid rgba(45, 212, 191, 0.3); }
+.quadrant-badge.danger { background: rgba(239, 68, 68, 0.12); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.posture-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.delta-pill {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+.delta-pill.up { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+.delta-pill.down { background: rgba(74, 222, 128, 0.12); color: #86efac; }
+.delta-pill.up-good { background: rgba(74, 222, 128, 0.12); color: #86efac; }
+.delta-pill.down-bad { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+
+.runs-count-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(201, 169, 97, 0.12);
+  color: var(--gold-bright);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.date-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+
+.delta-narrative-cell {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 320px;
+}
+.delta-narrative-cell.has-shift {
+  color: var(--gold-bright);
+}
+
+.actions-cell { text-align: right; white-space: nowrap; }
+.action-btn {
+  padding: 5px 11px;
+  background: transparent;
+  color: var(--teal-bright);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.action-btn:hover { background: rgba(45, 212, 191, 0.1); border-color: var(--teal-bright); }
+
+/* Empty + loading states */
+.state-card {
+  text-align: center;
+  padding: 80px 40px;
+  background: var(--navy-card);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+}
+.state-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  color: #fff;
+  margin: 0 0 10px;
+}
+.state-card p {
+  color: var(--ink-muted);
+  max-width: 500px;
+  margin: 0 auto 16px;
+  line-height: 1.65;
+}
+.state-card a {
+  display: inline-block;
+  padding: 10px 22px;
+  background: var(--gold-bright);
+  color: var(--navy);
+  text-decoration: none;
+  border-radius: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.spinner {
+  display: inline-block;
+  width: 32px; height: 32px;
+  border: 2px solid rgba(45,212,191,0.2);
+  border-top-color: var(--teal-bright);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.results-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 48px;
+  margin-top: 48px;
+  border-top: 1px solid var(--rule);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .filter-select, .filter-input { min-width: 100%; }
+  h1 { font-size: 34px; }
+  table { font-size: 12px; }
+  th, td { padding: 10px 8px; }
+  .delta-narrative-cell { max-width: 200px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="brand">
+      <div class="brand-mark">Æ</div>
+      <div class="brand-text">
+        <div>AQL GROWTH</div>
+        <div>PERCH · Dashboard</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <a class="header-nav-link" href="/">⚡ New Analysis</a>
+      <div class="version">v2026.04 · PARTNER EDITION</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="kicker">PERCH Corpus · Portfolio Intelligence</div>
+    <h1><em>Dashboard</em></h1>
+    <div class="subtitle">Every company PERCH has analyzed, every run preserved. Filter by placement, posture, or score. Click any row to open the IC report.</div>
+  </div>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat total">
+      <div class="stat-label">Companies</div>
+      <div class="stat-value" id="stat-total">—</div>
+    </div>
+    <div class="stat execute">
+      <div class="stat-label">Execute</div>
+      <div class="stat-value" id="stat-execute">—</div>
+    </div>
+    <div class="stat race">
+      <div class="stat-label">Race Mode</div>
+      <div class="stat-value" id="stat-race">—</div>
+    </div>
+    <div class="stat build">
+      <div class="stat-label">Build Mode</div>
+      <div class="stat-value" id="stat-build">—</div>
+    </div>
+    <div class="stat danger">
+      <div class="stat-label">Danger Zone</div>
+      <div class="stat-value" id="stat-danger">—</div>
+    </div>
+  </div>
+
+  <div class="view-toggle">
+    <button class="active" data-view="companies" onclick="switchView('companies')">Companies</button>
+    <button data-view="runs" onclick="switchView('runs')">All Runs</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <div class="filter-label">Quadrant</div>
+      <select class="filter-select" id="filter-quadrant">
+        <option value="">All</option>
+        <option value="EXECUTE">EXECUTE</option>
+        <option value="RACE MODE">RACE MODE</option>
+        <option value="BUILD MODE">BUILD MODE</option>
+        <option value="DANGER ZONE">DANGER ZONE</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Posture</div>
+      <select class="filter-select" id="filter-posture">
+        <option value="">All</option>
+        <option value="BUY">BUY</option>
+        <option value="HOLD">HOLD</option>
+        <option value="INVEST MORE">INVEST MORE</option>
+        <option value="SELL">SELL</option>
+        <option value="DECLINE">DECLINE</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Min Risk</div>
+      <input class="filter-input" id="filter-min-risk" type="number" min="0" max="100" placeholder="0">
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Max Risk</div>
+      <input class="filter-input" id="filter-max-risk" type="number" min="0" max="100" placeholder="100">
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Min Readiness</div>
+      <input class="filter-input" id="filter-min-ready" type="number" min="0" max="100" placeholder="0">
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Max Readiness</div>
+      <input class="filter-input" id="filter-max-ready" type="number" min="0" max="100" placeholder="100">
+    </div>
+    <button class="filter-btn" onclick="applyFilters()">Apply</button>
+    <button class="filter-clear" onclick="clearFilters()">Clear</button>
+  </div>
+
+  <div class="results-meta">
+    <div id="results-count">Loading...</div>
+    <div id="results-sort">Sorted by: Latest First</div>
+  </div>
+
+  <div id="table-container"></div>
+
+  <div class="footer">
+    AQL Growth · Eagle Vision · PERCH · v2026.04 · Partners Only
+  </div>
+
+</div>
+
+<script>
+let currentView = 'companies';
+let currentFilters = {};
+
+function esc(t) {
+  if (t == null) return '';
+  return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function quadrantClass(q) {
+  if (q === 'EXECUTE') return 'execute';
+  if (q === 'RACE MODE') return 'race';
+  if (q === 'BUILD MODE') return 'build';
+  if (q === 'DANGER ZONE') return 'danger';
+  return '';
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function fmtDeltaRisk(d) {
+  if (d == null) return '';
+  const v = Number(d);
+  if (Math.abs(v) < 0.1) return '<span class="delta-pill flat">—</span>';
+  const sign = v > 0 ? '+' : '';
+  const cls = v > 0 ? 'up' : 'down';
+  return `<span class="delta-pill ${cls}">${sign}${v.toFixed(1)}</span>`;
+}
+
+function fmtDeltaReadiness(d) {
+  if (d == null) return '';
+  const v = Number(d);
+  if (Math.abs(v) < 0.1) return '<span class="delta-pill flat">—</span>';
+  const sign = v > 0 ? '+' : '';
+  const cls = v > 0 ? 'up-good' : 'down-bad';
+  return `<span class="delta-pill ${cls}">${sign}${v.toFixed(1)}</span>`;
+}
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === view);
+  });
+  loadData();
+}
+
+function applyFilters() {
+  currentFilters = {
+    quadrant: document.getElementById('filter-quadrant').value,
+    posture: document.getElementById('filter-posture').value,
+    min_risk: document.getElementById('filter-min-risk').value,
+    max_risk: document.getElementById('filter-max-risk').value,
+    min_readiness: document.getElementById('filter-min-ready').value,
+    max_readiness: document.getElementById('filter-max-ready').value
+  };
+  loadData();
+}
+
+function clearFilters() {
+  document.getElementById('filter-quadrant').value = '';
+  document.getElementById('filter-posture').value = '';
+  document.getElementById('filter-min-risk').value = '';
+  document.getElementById('filter-max-risk').value = '';
+  document.getElementById('filter-min-ready').value = '';
+  document.getElementById('filter-max-ready').value = '';
+  currentFilters = {};
+  loadData();
+}
+
+function buildFilterQuery() {
+  const parts = [];
+  for (const [k, v] of Object.entries(currentFilters)) {
+    if (v != null && v !== '') parts.push(`${k}=${encodeURIComponent(v)}`);
+  }
+  return parts.length ? '&' + parts.join('&') : '';
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch('/api/companies?limit=1');
+    if (!r.ok) return;
+    const data = await r.json();
+    const d = data.distribution || {};
+    document.getElementById('stat-total').textContent = data.total || 0;
+    document.getElementById('stat-execute').textContent = d['EXECUTE'] || 0;
+    document.getElementById('stat-race').textContent = d['RACE MODE'] || 0;
+    document.getElementById('stat-build').textContent = d['BUILD MODE'] || 0;
+    document.getElementById('stat-danger').textContent = d['DANGER ZONE'] || 0;
+  } catch (e) { console.error('Stats load failed:', e); }
+}
+
+async function loadData() {
+  const container = document.getElementById('table-container');
+  container.innerHTML = `<div class="state-card"><div class="spinner"></div><p style="margin-top: 20px;">Loading corpus…</p></div>`;
+
+  try {
+    const url = currentView === 'companies'
+      ? `/api/companies?limit=500${buildFilterQuery()}`
+      : `/api/runs?limit=200${buildFilterQuery()}`;
+
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+
+    if (currentView === 'companies') renderCompanies(data);
+    else renderRuns(data);
+
+    document.getElementById('results-count').textContent =
+      `${data.returned || 0} shown · ${data.total || 0} total`;
+  } catch (err) {
+    container.innerHTML = `
+      <div class="state-card">
+        <h3>Could not load corpus</h3>
+        <p>${esc(err.message)}. The database may not be set up yet, or there are no PERCH runs saved. Run an analysis first.</p>
+        <a href="/">← Run PERCH</a>
+      </div>
+    `;
+    document.getElementById('results-count').textContent = '—';
+  }
+}
+
+function renderCompanies(data) {
+  const container = document.getElementById('table-container');
+  const companies = (data.companies || []).filter(c => c.latest_run_id);
+  if (companies.length === 0) {
+    container.innerHTML = `
+      <div class="state-card">
+        <h3>No companies yet</h3>
+        <p>The corpus is empty. Run a PERCH analysis and it will appear here automatically.</p>
+        <a href="/">⚡ Run PERCH</a>
+      </div>
+    `;
+    return;
+  }
+  container.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Vertical</th>
+            <th>Risk</th>
+            <th>Readiness</th>
+            <th>Quadrant</th>
+            <th>Posture</th>
+            <th>Runs</th>
+            <th>Last Scored</th>
+            <th class="actions-cell">Report</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${companies.map(c => `
+            <tr onclick="window.open('/report.html?run_id=${c.latest_run_id}', '_blank')">
+              <td>
+                <div class="company-name-cell">${esc(c.name)}</div>
+                <div class="company-domain-cell">${esc(c.domain)}</div>
+              </td>
+              <td class="vertical-cell">${esc(c.vertical)}</td>
+              <td>
+                <span class="score-pill risk">${Number(c.weighted_risk_score || 0).toFixed(1)}</span>
+                ${fmtDeltaRisk(c.risk_score_delta)}
+              </td>
+              <td>
+                <span class="score-pill readiness">${Number(c.weighted_readiness_score || 0).toFixed(1)}</span>
+                ${fmtDeltaReadiness(c.readiness_score_delta)}
+              </td>
+              <td><span class="quadrant-badge ${quadrantClass(c.quadrant)}">${esc(c.quadrant || '—')}</span></td>
+              <td class="posture-cell">${esc(c.partner_posture || '—')}</td>
+              <td><span class="runs-count-badge">${c.run_count || 0}</span></td>
+              <td class="date-cell">${fmtDate(c.last_run_at)}</td>
+              <td class="actions-cell">
+                <button class="action-btn" onclick="event.stopPropagation(); window.open('/report.html?run_id=${c.latest_run_id}', '_blank')">↗ Open</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderRuns(data) {
+  const container = document.getElementById('table-container');
+  const runs = data.runs || [];
+  if (runs.length === 0) {
+    container.innerHTML = `
+      <div class="state-card">
+        <h3>No runs match those filters</h3>
+        <p>Try clearing filters or broadening the score ranges.</p>
+        <a href="/">⚡ Run PERCH</a>
+      </div>
+    `;
+    return;
+  }
+  container.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Risk</th>
+            <th>Readiness</th>
+            <th>Quadrant</th>
+            <th>Posture</th>
+            <th>Delta Narrative</th>
+            <th>Scored</th>
+            <th class="actions-cell">Report</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${runs.map(r => `
+            <tr onclick="window.open('/report.html?run_id=${r.id}', '_blank')">
+              <td>
+                <div class="company-name-cell">${esc(r.company_name)}</div>
+                <div class="company-domain-cell">${esc(r.company_domain)}</div>
+              </td>
+              <td>
+                <span class="score-pill risk">${Number(r.weighted_risk_score || 0).toFixed(1)}</span>
+                ${fmtDeltaRisk(r.risk_score_delta)}
+              </td>
+              <td>
+                <span class="score-pill readiness">${Number(r.weighted_readiness_score || 0).toFixed(1)}</span>
+                ${fmtDeltaReadiness(r.readiness_score_delta)}
+              </td>
+              <td><span class="quadrant-badge ${quadrantClass(r.quadrant)}">${esc(r.quadrant || '—')}</span></td>
+              <td class="posture-cell">${esc(r.partner_posture || '—')}</td>
+              <td class="delta-narrative-cell ${r.quadrant_changed ? 'has-shift' : ''}">
+                ${r.delta_narrative ? esc(r.delta_narrative) : '<span style="color: var(--ink-faint);">First run</span>'}
+              </td>
+              <td class="date-cell">${fmtDate(r.created_at)}</td>
+              <td class="actions-cell">
+                <button class="action-btn" onclick="event.stopPropagation(); window.open('/report.html?run_id=${r.id}', '_blank')">↗ Open</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadStats();
+  loadData();
+});
+</script>
+</body>
+</html>
