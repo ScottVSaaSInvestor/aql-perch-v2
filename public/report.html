@@ -1354,6 +1354,36 @@ strong { font-weight: 600; color: var(--ink); }
   margin: 8pt 0;
 }
 
+.factor-definition {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8pt;
+  margin-top: 5pt;
+  margin-bottom: 7pt;
+  padding: 7pt 10pt;
+  background: rgba(255,255,255,0.025);
+  border-radius: 2pt;
+  border-left: 2pt solid rgba(45, 212, 191, 0.45);
+}
+.factor-definition.readiness { border-left-color: rgba(201, 169, 97, 0.5); }
+.factor-definition-block { }
+.factor-definition-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6.5pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal-bright);
+  font-weight: 700;
+  margin-bottom: 2pt;
+}
+.factor-definition.readiness .factor-definition-label { color: var(--gold-bright); }
+.factor-definition-text {
+  font-size: 8pt;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
 .factor {
   display: grid;
   grid-template-columns: 36pt 1fr 72pt;
@@ -1727,24 +1757,57 @@ strong { font-weight: 600; color: var(--ink); }
 
 <script>
 const RISK_FACTORS = [
-  { id: 'R1', name: 'Competitive Window', weight: 18 },
-  { id: 'R2', name: 'AI-Native Entrant Threat', weight: 16 },
-  { id: 'R3', name: 'Incumbent AI Posture', weight: 15 },
-  { id: 'R4', name: 'Horizontal AI Encroachment', weight: 16 },
-  { id: 'R5', name: 'Customer Switching Propensity', weight: 14 },
-  { id: 'R6', name: 'Regulatory Moat Durability', weight: 11 },
-  { id: 'R7', name: 'Market Timing Risk', weight: 10 }
+  { id: 'R1', name: 'Competitive Window', weight: 18,
+    what_measured: 'How much time remains before AI fundamentally changes how deals in this vertical are won and lost.',
+    why_matters: 'Determines urgency. Wider windows allow deliberate execution; narrow windows compress the hold and demand rapid shipping.' },
+  { id: 'R2', name: 'AI-Native Entrant Threat', weight: 16,
+    what_measured: 'Whether well-funded AI-native startups are attacking the core workflow with credible wedges and early traction.',
+    why_matters: 'AI-native entrants often bypass incumbent advantages by starting from a different architectural foundation. Funded entrants compound faster than self-funded ones.' },
+  { id: 'R3', name: 'Incumbent AI Posture', weight: 15,
+    what_measured: 'How the company stands relative to direct competitors on shipped, in-production AI features — not roadmap commitments.',
+    why_matters: 'Customers buy shipped features. An incumbent shipping ahead of peers extends its lead; one shipping behind loses enterprise deals on AI capability alone.' },
+  { id: 'R4', name: 'Horizontal AI Encroachment', weight: 16,
+    what_measured: 'Whether the product value can be replicated by ChatGPT/Claude plus a thin UI, or by horizontal SaaS (Monday, ClickUp, HubSpot) adding vertical templates.',
+    why_matters: 'Vertical SaaS loses when the category is substitution-friendly. Deep workflow embedding, regulatory gates, and SOR authority are what make horizontal AI encroachment infeasible.' },
+  { id: 'R5', name: 'Customer Switching Propensity', weight: 14,
+    what_measured: 'Practical difficulty and organizational cost to migrate from this product to an AI-enabled competitor.',
+    why_matters: 'Low switching cost = high risk of churn to AI-native alternatives. High switching cost protects revenue during the hold and buys time to ship AI capability.' },
+  { id: 'R6', name: 'Regulatory Moat Durability', weight: 11,
+    what_measured: 'Strength of regulatory protection — HIPAA, EVV, FedRAMP, SOC 2 required by buyers, mandated audit trails.',
+    why_matters: 'Weak regulatory protection means new entrants face no meaningful compliance gate. Score INVERSE to moat strength — low regulatory burden = HIGH risk score.' },
+  { id: 'R7', name: 'Market Timing Risk', weight: 10,
+    what_measured: 'Whether AI investment is matched to where buyers actually are. Not too early (wasting capital on features buyers ignore) or too late (missing table-stakes expectations).',
+    why_matters: 'Timing determines whether AI investment converts to ARR or sits unused. Buyer AI maturity is as important as technical AI capability.' }
 ];
+
 const READINESS_FACTORS = [
-  { id: 'A1', name: 'Workflow Embeddedness', weight: 18 },
-  { id: 'A2', name: 'Data Foundation & Quality', weight: 18 },
-  { id: 'A3', name: 'Outcome-Labeled Data', weight: 14 },
-  { id: 'A4', name: 'Value Quantification', weight: 12 },
-  { id: 'A5', name: 'Pricing Model Flexibility', weight: 5 },
-  { id: 'A6', name: 'AI/ML Team Capability', weight: 12 },
-  { id: 'A7', name: 'Architecture Readiness', weight: 10 },
-  { id: 'A8', name: 'Compounding Loop Potential', weight: 8 },
-  { id: 'A9', name: 'Leadership AI Clarity', weight: 3 }
+  { id: 'A1', name: 'Workflow Embeddedness', weight: 18,
+    what_measured: 'Whether the software sits at the operational center of the customer business — open all day, touched by every worker, generating real-world actions.',
+    why_matters: 'AI compounds fastest in workflows that run through the SOR. A company that only owns recordkeeping has a weaker path to SOA than one that owns the execution surface.' },
+  { id: 'A2', name: 'Data Foundation & Quality', weight: 18,
+    what_measured: 'Multi-tenant cloud architecture, unified schema, documented data dictionary, working CDC pipelines. Data in a shape AI can work with.',
+    why_matters: 'Without a durable data foundation, AI features are bolt-ons that don\'t compound. This is often the binding constraint on the 12-24 month AI roadmap.' },
+  { id: 'A3', name: 'Outcome-Labeled Data', weight: 14,
+    what_measured: 'Whether the product captures proposal → correction → approval → outcome chains — telemetry that becomes a teachable dataset.',
+    why_matters: 'Outcome labels are what separate a compounding AI moat from one-off AI features. They enable model improvement without manual labeling.' },
+  { id: 'A4', name: 'Value Quantification', weight: 12,
+    what_measured: 'Whether the company can tell a customer in dollars exactly how much value the software delivers. Real ROI cases with baseline measurements.',
+    why_matters: 'Outcome-tier pricing requires provable outcomes. Companies that cannot quantify value cannot credibly shift from per-seat to per-outcome pricing.' },
+  { id: 'A5', name: 'Pricing Model Flexibility', weight: 5,
+    what_measured: 'Ability to shift pricing from per-seat to outcome-tier without rebuilding the commercial system.',
+    why_matters: 'Pricing transformation is how AI work captures value. Rigid per-seat pricing caps monetization of AI-driven outcomes.' },
+  { id: 'A6', name: 'AI/ML Team Capability', weight: 12,
+    what_measured: 'Named applied-AI builders with production shipping evidence. In-house expertise, not outsourced prompts.',
+    why_matters: 'Shipping production AI at enterprise quality requires durable team capability. Outsourced AI rarely compounds; it creates features the company cannot iterate on.' },
+  { id: 'A7', name: 'Architecture Readiness', weight: 10,
+    what_measured: 'Cloud-native, multi-tenant, scalable ML inference, RAG layers, observability, safe AI deployment discipline.',
+    why_matters: 'Architecture gates what the team can ship and how fast. A modernized stack accelerates every downstream AI initiative; a legacy stack throttles them all.' },
+  { id: 'A8', name: 'Compounding Loop Potential', weight: 8,
+    what_measured: 'Whether at least one named workflow connects usage → outcome labels → model improvement → better outcomes → more monetization as a closed loop.',
+    why_matters: 'Compounding loops are what convert Systems of Record into Systems of Action. Without a live loop, AI features remain stand-alone rather than self-improving.' },
+  { id: 'A9', name: 'Leadership AI Clarity', weight: 3,
+    what_measured: 'Whether the CEO connects AI to a specific workflow, specific customer segment, and specific economic result in one sentence.',
+    why_matters: 'Lowest weight, often binding constraint. Unclear AI vision at the top sends fuzzy signals to the entire org about what to ship and why.' }
 ];
 
 const AQL_LOGO_B64 = "iVBORw0KGgoAAAANSUhEUgAAAMkAAABiCAYAAAD6HfcoAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAWGklEQVR4nO3daXRU14Hg8f99r17tpV1C+y6BEJuw2QwY28FrEnuS2I5xx+6049MZpxOfmUnm5EOfmemTfJnO5PQ5mUmvGWPHTvASjLEBB9usxggESCAQAiEECElo30pSLa/ee3c+kEMP40C5xwuScn/fQCrdq3r1r/fefaoqIaVEUZQb0271BBRlulORKEoSKhJFSUJFoihJqEgUJQkViaIkoSJRlCRUJIqShIpEUZJQkShKEioSRUlCRaIoSahIFCUJFYmiJKEiUZQkVCSKkoSKRFGSUJEoShIqEkVJQkWiKEmoSBQlCRWJoiShIlGUJFQkipKEikRRklCRKEoSKhJFSUJFoihJqEgUJQkViaIk4brVE/ii9FrI3sEhAPKys8hzIW7xlJQZ4k8ikr39U3JnUxNtPb3YZoKyOXmsmb9IPl6TpUJRkpr1kZyykb/dc4D6y13IQAi/P8T58530TSRIT79P3psrVCjKTc3ac5IrIC+AfGXvYZr7ByAtnajHYDARx0wNcGpigBd2v8s5C/VRX8pNzdpIHKBtwubkxU5GzShmwkKXgnhkCsNwgVenfegKO4+33uqpKtPcrI0E4ED9QSKRCIaEbMNDaTDE2up5VGVlsLCyBNOOs7/5OEciam+i3NisPScpBBELj0kZmWBhcTl3LL+D2OQU86uLuNR1mVBuOsNtrfSPhdnbdJLlaxbd6ikr09SsjQRgdW016aEgqWlZ3FmagTmRxvIAYp/PLbNS/ERXLufND5toOHOOvSUl8u6iVHUSr3yMmM0fUd2FlFdGxzEMD0uDvo8FcGR8TP70td8zHI6ztrKQH3xtPYWo6yfK9Wb1OUkRQmT6DbrbW7kciX7s2SDPH6Cuej64XDT39LCr4zJXUOcnyvVmdSQAlZ6AqCoooLnxKF2jw9cFUGQY4kurF+PWXYw4FjsOH2HiVk1UmbZmfSQANTm5Ir+wiOOtH1/uLXBDfk4OY5bF2cEB9rZ20qX2Jsr/5U8iEoDbysrEnNw8dhw+dl0ANlCUk4Uw3Dj+EDsbjnJh6hZNUpmW/mQiAVhRUSn6+gboDFvXQgkCAR18hpuYLeiMxNnVfJrLam+i/MGfVCQAy5cvp/7QoWv/LgARcIEdiYMwGHUEB06f5WTP5P/3GFcGBm8a2NnOK/JE2yXZ0nH5U4fYPTwpT7Zfls3nOm9p1F1dXbP2SWVWXCdpuXRBLigt/0RLtwvzs8SFiz55sL1Prq7KFT0gc7My0BM2hu4hnIhzJWayt+EItz1yj8zT/21Lwj/7u1/IqakpsrNy5Pefe/a623ZcGZaHDh3i9OnTTExMYZoxKktL5IoVy1h3x3IB8Pf/slF2dXXx/PPPk5+dfsOxW9o65MmWVk6caiUWiyGlJDsrQ6anpzOvuop771z5uS5lv/fee7K8vJyqqioBsHHjRlavXi3Xr18/65bQZ3wkbZPDcm9LI2OaJdcUV3+iDbS0bhEHG46y14rLeTUl5KSnkeYzuBgeISUrAz0a53jbWU511ZJXOucTz6X+6HH50q9fJh6Pk56Zzd333idrK4sFwKX+Mblx40a2bt1Keno6FRUVjI+Pc7ThMMebm4knpLxv3Qqx7fe7aG1t4d9/7/kbjtNxuU9uf/d93nxrCy7DQ2FhIUKTHD3WwGD/AKtXryItLU0uWzTvc3vA/ua137Hqjjuoqqqiq3dAvvjKJhzNYP369Z/XkLfMjI/k/VON7DnfwojuMBSLyNurF1CI66YPjiK/WyyqqZCd3f2caRXMqS4mw28QScSw5RQur2BSS7CtsZHs0odkNnyii4xb39mOhc5DD3+NbdvfZccHe6it/DYA772/iy1btrB48WIe/sqXKS8tZnIywsFDDfxm06uMTv4jVYuWybApwJNKzL7xcLv37uefN77M3Jp5PP1nj1NUkE8ikWDHjh34fD56e3vRXDonznTIwcFBSktL6ezspLS0lMqiOWLPwaNyeGAYdyBARWUVC8pzxQeHm6Whady1fKEAONl2Ufb29nL/XXcIgN6RSdnWfh6fP0j/0BBHW84RFR5K5y6RhUX5OJ4QWiCdwyfbZU9PD5qQ1NbMo7okb8bvWWZ0JB/1dsrG82cZtU2a2s9y5UovqaFUCvPKkt52fm6uSMvIlGcv9nLsWAt3LlvKUDxKzpxcouEIsbEJzhw/zrHj53mgrvITzaf5VAvBUCqPPvEkHx46yts73uUbjz4hK7K94oWXXkLTDZ555hnuW7v82gOncl6tPHG6jfaLl2k41oRwB3B0D3H7xuO89fY7CMPLI994nCcfefDazyotL5MaOqPjY9RVl4rX3vlA/u6NN6iorORcWxt/9f3v8862nfJYUyNXunvwBkOUVFTz+BPflB/sO0hX5yXuWv4zAP7+n37F8MggUrjkA+uWi3d27OSdHTv45pNP88pvN2FKF+0Xu/mnjS/x3HPfxR9K5/CxRi51dtHTfRlpWdy5djX/5Uc/+ET33XQ2oyM5cvI4g0Mj2LbE1qF3cIi9Bw9gLpyS989dkPQZLN9tiOjcYtm85yPmVy8hIxQk37h6Mn8lgmwkxIF9h1heWExRtvumP2vbrgOy7dx57r73ftYtrRGLliyV+z7cT0vrWZz582RP3xDpqaHrAgEonZMiikvL5OHGZppPnUZKiWVZODdZXGs/3wFGgK8+/CAAOw82ys4LF9EMF1bcRDNc9HT3ytNnz3Ki+SRuv595NfNpbWvjzbe2kj1nDl95+BEmojE2vb4Z07bxuA2ampo43tEnM9JTqW9owLYtmo6f4IF1y9mzfz9d3VcoKSmhrq6O8x0XyM3Lp6amhtRQCtK2GR8ZZeVtyygqzOetzZt56623VCS30sGeS/LMxYtITeDxefEHQ9giwulz7UyOjhPw++WaouQn8xUgCrPTpTkyQldPH1lllRCEfD/CWVIpPzxez576/Sx+5N6b/pxdu/fi8ft57JsbALhjzVoOHjrM3v37yM3PIxRKxfB4rrvN4ZPt0u0PEkxJwR8M4Qv4kZoATeDz+m84lnDpROMxEjb0RpHvf7CH+o8O4iDxebwMj46wetUdFJeW4HJ7WXvnXXzvW18Tz/34J3J0fJz/+J9/xKP3rRbnh+KyoekEe/cf4C+ffQZbwv4DBynIm4NLd1NbW8vRpkYa27vlufYOyiqqqJ5XTmnF99j0+mbKy8v52x8/J9oGJmUsFqGq6nb+2w+/KwDOtbbIxqNHkm/IGWDGLgE3tJxkYGKMhCMxPD5Gx8KMR6MIv49LA/28u283W5oaZKcZSbo0+djCWlFVkMvlngtcmhxhV/+o3B+OywODXWSvqqW+u40dQ/2y8wbXTjoGJuS5jg4cKTh9+jS/eOVteaHjImbCYt/+D/EHAliOzfj4OIdOX5IAnSNR+auNG3nxxRc5feYs8USCwsJC4vE4NhLLufHxVjCUis/no7HxJHk+xJo77+LJbz3FbctWsHzlKiYjMQaHR0BzEU9YVFbPA+BiZxcTU5MsXLIYgMosj6iqqsI0TcrLy9F1nebmZuobDpM9J4cvf+VhOi5c4vDhI0xNRVmwYAF5HkRJEBEIBBB/eOXzxNg4QkJ+Xt518/T8P08KM9WM3JPs774gT15sJyIkUjeIRuNIR+IydByXhuNx097Tzej4GHmF+eiZuizUPTfdq8zzucXpwjx55NQxukdGkYaLgbERli67nYlYhIMHD7DgkUf/6G3r6+s5f/48bo+P7du3I4WG4zhkZmYwPjrGhY4ONmzYwBuvvcoLL7xA5InHpcfjobOzk+6eXoThJm9ONkuXLsHn96AjOXOmFXOqQEpzEhcOi+fPvTb/Bx+8n6073ufXL75ARuh5WVFRRe28WsbCkyRicXw+H5mZmZiJGIZhYLh1AJbULaK15STHjh1h7kP3cLZ/Qp462UxK0E9lRTlVVVU0NjYS8Hn40t33cM/d6/j5//hbtm7dgm0nWLduHQA9UaQZizAyfPXdZzQh8frcBLzea/dJ0O9Dw/mUW3p6mHGRtI4Ny/3HDjMcncQxdHSPQWIyQmooBRybiWiEgNdDPGbTPznGeDxCKDZFYSD5s9qKBbVcGRsmEPRg46KqqISQJVhVWUOahJIbrHC9//vfk4jFeOqpp8jMysHt9TM4OEg0HuOVX/+G373+Gj/84Q/paGvlUP1HmJFJysvLcbvdOI6FGTGpq6sjI8WHIRxcOLz5xuvkZqchEnE8hsbin/7NtfGefupbXOi8TFPjCX7+s/9OaWkpAZ+fg4fqscwEPo/BvOoqxsKjCOkwMjgAVLP+7rs4dvgQL7/0IkN9fbLjwkWGh/pYs2oVt5dnifV3rZW//F9NWHGDB+77EgUphqiprpZHjhwhP7+AhfOrASjwIUJ+rxzuv8K/vLpVzq2sxDZNopF/vQDr9/uJxWKfaltPFzMukq6hfo6ebsFJCyIFxM0EHp+XhG0xGZ4gNRRE97gZHx+lLD+f/rFRpsITtMfOSCNmUpCWRV3twj/6YC9EE19ds06GHQePppMAPECgbgn5NwikZ2RCIm3W3bmGZ7/9NPnp/mvfd3E4Ii+2tZGe4qeuLEv84Lnvyjc3v0FfXx/NJ5owdFizciUXOi9RU1VOcQAxv6pMluTnYEYm6bvSjcclMMT1R3nzCjLFd7/zF/LgvHraWs/Q39ONlJKqslKCQT9Lly7lOxseES9v3iFXLFtKeXExAOuXLxS9Tz0pt23bRv1H+wCNB+/9Ehs2XD2PWnn7Uo7eVgfAmqU1AuCh+9fjc+uUlJWTF9Sv/W7/7qH7aW4+wdtbtvDTn/wNt99Wx9yqf10FLC7MZ9Wqlf/WzTstzbgXXf2HF/5BXgwPMmlomJpAdwSGfvUZGcBw6djxGG5NkJeWTrrHj19quC2bFM3FvOIy7r3jzqQn9K3do3J+Ybpo743KqjyfuNAdluWFKX/0dvVHj0u/38+S2rkf+/qpc5ely6VRU1547WtNp87I4eFh0DUqKipoPtlCRUUFi6pKxdmufjkxMY6GQDoWWCZZGWmUFpf80bGPnWqXAwMDhEIhcnNz8Xq9FOVcnefl/lE5ONTPbbXXX1Rs6+ySly5dwu32cPeq61fbznZ0SsdxmF9Vdu3/W862y2AohdKCOdd9764DDdLv95Ofn49lWQhpU1GcLwDOX+qSkUiERfM/fp/MNDMqkq2nGuWmnduZdEPU0EhIcAsXOBLHcdAQ6AKkY5HqC5CXkUHIcON1IDeUTm1ZOWsqam660U40tkqPP8S++sPELYmuuZiMRkhJDTEZHgHL4s++8XUKizNn/MZXPpkZc7jVhS33NzYwbsXQAiGk42C4dNyagWUmcLkMdMHVY3KXm1R/EK/LjUd3UVFcxPzyKpam5iR9YA+ERzlx5AgvbHqN3tFR/MEU4gkTn8+DjJsEBFimyV//+K++iF9bmQZmzBLwewf30Tk0gB4I4GgCy7IwNJ14NIZjJdClRNgOmuUQMDwEvR6wbFxSkBJMISs18xONs33ne/zm9TfoHhrCFQwScxxwuwnHTGIIEi6Dzdu3035y9v7Vq3K9GbEnaZkYlvubGojoEsfQiJkJdKnhxBJoSHRNx6VpOAkTj66RHgiR5vFjR+PYcYvzZ9uwJyKMlJRIv9vDVHgCO2ER8HsZGu5jbc1SAXC06bTctXsfg1MRsrPm4OBCcwSTk5Okp2YSjoxhSkHX6Cg//9+/4p//509u9V2jfAFmRCTv79tD2DSRPhdR28ZybNJ9QeKTEXx+L47jYJtxNFsS8PjwaS4wLTAtzEScoZEwkyNj9HR1EwwGsW2LeDyOtG2EbVKYVyjL0nJEQUEROTm5xAZHiMUSjI2PkRlKwy114tGrrzeJS5uUnBx2Nxxiy84P5dcfSL4IoMxs0/5wq3WgT55qO4MW8JIQEluAy+VCd8DQdOyERSwyRSIWJzUQpLSwgKz0NIJuL1kpaeRn5VBWXEJO1hxM02R4dISoaeIIQdROEJOSkfDVt3/In5MiHnzgy2joOJakML8QbB1/IJVwJIqtaUSQDEcjDMem2Lhp0y2+d5QvwrTfkxxoOkJE2pi2Rdy28Xg9CAuisQh+lxtHk7g1QcjjY0FZBXU1tfiEhjMVI+j14Vg2tm2DJnC5dOQfzmfQBIauoTk2Pt24Nt5jj36dnXv30dHVx9DQEAF3kLGpCQKhIHHNxu8OEItMkpKSyomW07z85jb59De+qvYms9i0XgI+NnhF/uLXG4l5NMKORcRO4HIbuDQdLWEjHInLBdZUlPKsPH7w7e9Q4wp+6gfsazsPyh/99X9F6l7ipo0vEGAqGkFqEp/PixmLgJUgYOiU5KTz6ssbKcgIqVBmqWl7uHUhEZd7jzYw5dhMJRJX/9rX40EXGtgOmqbhdrvQHEnAcLOkZv5nEgjAurWrWbNyBY4dR0oLyzbxed3IhEUiGsOre5BSgO6iq7ePX7348mcxrDJNTdtIOi5d5Pipk0hdIyEdEDq64cZyJKZpYdtX9yROPEFOWgbLFtd9ZmPnBRBPbngctxCkBPxEwmFiU1MEgwGklMStBL5AiGjMxJE6L2/axEfNbdN3l6x8KtM2kvrGo0TMOLhdSJeGrYFl2ziOA7qGrus4lo3bgdqySuqCn+1Huz28ZolYvXIZZmSCFL8Hx06g4aDrOvF4HF3XsSUYXi+RaILfbnr9sxxemUamZSS72lvl2Qvn0YMBotLB1nUS0iHh2OguF16vF13XEbZDaXYeKxYs+Vzm8eyfP4mBRWrAS0ZKgPDYKI5l4vP5GA9P4PUHmYiaZM7JY+euvew5dkbtTWahaRnJ7voDmJrAcgmijnX1NSJIbOng0nWkZWNGY7gQ3L5gMctyCj+Xk+Z7li0QTzz2NYb6e5GJOEGvh0TcJBAIYNs2tu3gSMFUJIaZsHjl1dc+j2kot9i0i2Tz8QbZ3nMZ6XMTxcbWBULXsaVESNCQJKIRdAfK8otYtvDz/fCdv3zmaYrys4lFpwgGfLh0gZOw8Pl8mKaJx+NhfHKKQCiVXbv38tbuw2pvMstMq0jaYmG569ABTEMQFQni0kboGkIIhJToQuIVOoYUZKamsWT+Aqr8n+8H75TnZYkNj32d1ICX8MgQAa+HqckwupS43QamaRIKhUgkEti2wy//8R/oGoupUGaRaRXJ27t2Mp6IIXxu4tJGcwncbhfx6BQuxyHk9mFFYjixGCUF+axactsXMq//9NyzIis9hTmZaQg7gbBNUlP8xCYn0KWD7oAZi+H1uGk/28a2rW9/IfNSvhjTJpLz4VEZ7h/CmYzCRIyAJQiZguBUghxbJyMmcA9PkGlprCyfy9rqRVQmeRO6z9Ivf/F3BH1ucEwMzSY2MYZbk2Al8Lt1bDOGGZnC6zHY/Du10jWbTOsr7jNFd1jKwhShrrjPUioSRUli2hxuKcp0pSJRlCRUJIqShIpEUZJQkShKEioSRUlCRaIoSahIFCUJFYmiJKEiUZQkVCSKkoSKRFGSUJEoShIqEkVJQkWiKEmoSBQlCRWJoiShIlGUJFQkipKEikRRklCRKEoSKhJFSeL/AFDEYiHsc1MRAAAAAElFTkSuQmCC";
@@ -2274,6 +2337,16 @@ function renderReport(payload) {
             <div class="factor-id">${f.id}</div>
             <div>
               <div class="factor-name">${esc(f.name)}</div>
+              <div class="factor-definition">
+                <div class="factor-definition-block">
+                  <div class="factor-definition-label">What's measured</div>
+                  <div class="factor-definition-text">${esc(f.what_measured || '')}</div>
+                </div>
+                <div class="factor-definition-block">
+                  <div class="factor-definition-label">Why it matters</div>
+                  <div class="factor-definition-text">${esc(f.why_matters || '')}</div>
+                </div>
+              </div>
               <div class="factor-rationale">${esc(s.rationale)}</div>
             </div>
             <div class="factor-num-block">
@@ -2322,6 +2395,16 @@ function renderReport(payload) {
             <div class="factor-id">${f.id}</div>
             <div>
               <div class="factor-name">${esc(f.name)}</div>
+              <div class="factor-definition readiness">
+                <div class="factor-definition-block">
+                  <div class="factor-definition-label">What's measured</div>
+                  <div class="factor-definition-text">${esc(f.what_measured || '')}</div>
+                </div>
+                <div class="factor-definition-block">
+                  <div class="factor-definition-label">Why it matters</div>
+                  <div class="factor-definition-text">${esc(f.why_matters || '')}</div>
+                </div>
+              </div>
               <div class="factor-rationale">${esc(s.rationale)}</div>
             </div>
             <div class="factor-num-block">
