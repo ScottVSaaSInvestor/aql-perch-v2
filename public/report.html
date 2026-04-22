@@ -2089,7 +2089,7 @@ function renderReport(payload) {
   document.getElementById('toolbar-subject').textContent = company.name;
   document.title = `PERCH · ${company.name} · AQL Growth IC Report`;
 
-  const totalPages = 10;
+  const totalPages = 11;
 
   const pageHeader = (subject, section, pageNum) => `
     <div class="page-header">
@@ -2147,7 +2147,7 @@ function renderReport(payload) {
     </div>
   `;
 
-  // ============= PAGE 1 — EXECUTIVE SUMMARY =============
+  // ============= PAGE 1 — EXECUTIVE SUMMARY (Scores only) =============
   const execSummaryPage = `
     <div class="page content">
       ${pageHeader(company.name, 'Executive Summary', 1)}
@@ -2187,6 +2187,20 @@ function renderReport(payload) {
         </div>
       </div>
 
+      <div class="page-transition">Three numbers set the stage. The next page unpacks what they mean — the partner's read, the upside lever, the risk to watch, and the evidence confidence behind the scoring.</div>
+
+      ${pageFooter(1)}
+    </div>
+  `;
+
+  // ============= PAGE 2 — WAVE TOPS & ANALYTICAL READ =============
+  const waveTopsPage = `
+    <div class="page content">
+      ${pageHeader(company.name, 'Wave Tops & Analytical Read', 2)}
+      ${sectionMarker(2, 'Wave Tops · Analytical Read')}
+      <h1>The Partner's Read</h1>
+      <p class="lede">Four wave-tops for committee reference, followed by the analytical synthesis that positions the company against its named peers.</p>
+
       <div class="wave-tops">
         <div class="wave-tile posture">
           <div class="wave-tile-label">Partner Posture</div>
@@ -2195,11 +2209,11 @@ function renderReport(payload) {
         </div>
         <div class="wave-tile upside">
           <div class="wave-tile-label">Biggest Upside Lever</div>
-          <div class="wave-tile-sub" style="font-style: normal; color: var(--ink); font-size: 9pt; line-height: 1.45;">${esc(truncateAtWord(result.partner_posture?.biggest_upside_lever || '—', 160))}</div>
+          <div class="wave-tile-sub" style="font-style: normal; color: var(--ink); font-size: 9pt; line-height: 1.45;">${esc(truncateAtWord(result.partner_posture?.biggest_upside_lever || '—', 180))}</div>
         </div>
         <div class="wave-tile risk-watch">
           <div class="wave-tile-label">Biggest Risk to Monitor</div>
-          <div class="wave-tile-sub" style="font-style: normal; color: var(--ink); font-size: 9pt; line-height: 1.45;">${esc(truncateAtWord(result.partner_posture?.biggest_risk_to_monitor || '—', 160))}</div>
+          <div class="wave-tile-sub" style="font-style: normal; color: var(--ink); font-size: 9pt; line-height: 1.45;">${esc(truncateAtWord(result.partner_posture?.biggest_risk_to_monitor || '—', 180))}</div>
         </div>
         <div class="wave-tile confidence">
           <div class="wave-tile-label">Evidence Confidence</div>
@@ -2222,15 +2236,15 @@ function renderReport(payload) {
 
       <div class="page-transition">The wave-tops summarize what the assessment found. The next page widens the lens to the partner's read on what this means for the hold — the posture, the upside surface area, and the specific watchlist that follows from the placement.</div>
 
-      ${pageFooter(1)}
+      ${pageFooter(2)}
     </div>
   `;
 
-  // ============= PAGE 2 — PARTNER POSTURE =============
+  // ============= PAGE 3 — PARTNER POSTURE =============
   const posturePage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Partner Posture', 2)}
-      ${sectionMarker(2, 'Partner Posture · Context')}
+      ${pageHeader(company.name, 'Partner Posture', 3)}
+      ${sectionMarker(3, 'Partner Posture · Context')}
       <h1>Posture &amp; Positioning</h1>
       <p class="lede">The observed posture, the upside surface area, the watchlist — distilled for committee review.</p>
 
@@ -2262,15 +2276,15 @@ function renderReport(payload) {
 
       <div class="page-transition">Knowing who the company is, we turn to the two questions that determine whether their moat survives the AI era: how urgent is the threat, and how ready are they to respond. We start with the clock — seven Risk factors measuring how much time they have.</div>
 
-      ${pageFooter(2)}
+      ${pageFooter(3)}
     </div>
   `;
 
-  // ============= PAGE 5 — STRATEGIC PLACEMENT / SYNTHESIS =============
+  // ============= PAGE 6 — STRATEGIC PLACEMENT / SYNTHESIS =============
   const quadrantPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Strategic Placement', 5)}
-      ${sectionMarker(5, 'Strategic Placement')}
+      ${pageHeader(company.name, 'Strategic Placement', 6)}
+      ${sectionMarker(6, 'Strategic Placement')}
       <h1>The Quadrant</h1>
       <p class="lede">PERCH doesn't just place the deal — it prescribes the operating posture. Risk sets urgency; Readiness sets feasible speed.</p>
 
@@ -2344,18 +2358,18 @@ function renderReport(payload) {
 
       <div class="page-transition">The quadrant is a snapshot — where the company sits today. But every PERCH placement sits on a longer journey: the multi-year transition from System of Record to System of Action. The next page maps that path.</div>
 
-      ${pageFooter(5)}
+      ${pageFooter(6)}
     </div>
   `;
 
-  // ============= PAGE 6 — PATH TO SOA (SPECTRUM) =============
+  // ============= PAGE 7 — PATH TO SOA (SPECTRUM) =============
   const soa = result.soa_milestone_map || {};
   const milestones = Array.isArray(soa.milestones) ? soa.milestones : [];
   const t12 = result.twelve_month_view || {};
   const soaPathPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Path to SOA', 6)}
-      ${sectionMarker(6, 'Convergence Path · 0 → 100')}
+      ${pageHeader(company.name, 'Path to SOA', 7)}
+      ${sectionMarker(7, 'Convergence Path · 0 → 100')}
       <h1>The Path to SOA</h1>
       <p class="lede">EXECUTE, RACE MODE, and BUILD MODE are the three quadrants with a viable path. The spectrum below shows where this company stands today, the readiness milestones that carry it to 100, and the clock that governs pace.</p>
 
@@ -2381,15 +2395,15 @@ function renderReport(payload) {
 
       <div class="page-transition">The 3-5 year arc is the destination. The 12-month plan is the first leg. The next page names the milestones that carry the company across the first year — what must ship, when, and why.</div>
 
-      ${pageFooter(6)}
+      ${pageFooter(7)}
     </div>
   `;
 
-  // ============= PAGE 7 — MILESTONES & 12-MONTH FORWARD VIEW =============
+  // ============= PAGE 8 — MILESTONES & 12-MONTH FORWARD VIEW =============
   const milestoneDetailPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Milestones & Trajectory', 7)}
-      ${sectionMarker(7, 'Milestone Narrative · 12-Month View')}
+      ${pageHeader(company.name, 'Milestones & Trajectory', 8)}
+      ${sectionMarker(8, 'Milestone Narrative · 12-Month View')}
       <h1>Milestones</h1>
       <p class="lede">Each waypoint on the Path is a concrete deliverable with a timeline, a feasibility read, and linked readiness factors. The 12-month forward view closes this section.</p>
 
@@ -2439,15 +2453,15 @@ function renderReport(payload) {
 
       <div class="page-transition">The milestones name what must ship. The next page names where the Bridge concentrates attention — the sequenced priorities that unlock the SOA path fastest, each tied to a specific readiness gap.</div>
 
-      ${pageFooter(7)}
+      ${pageFooter(8)}
     </div>
   `;
 
-  // ============= PAGE 3 — RISK SCORECARD =============
+  // ============= PAGE 4 — RISK SCORECARD =============
   const riskFactorPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Risk Factor Scorecard', 3)}
-      ${sectionMarker(3, 'AI Risk · The Clock')}
+      ${pageHeader(company.name, 'Risk Factor Scorecard', 4)}
+      ${sectionMarker(4, 'AI Risk · The Clock')}
       <h1>Risk Scorecard</h1>
       <p class="lede">Seven factors measuring how much time the company has before AI changes how deals are won and lost. Lower is better. Evidence-backed from live research.</p>
 
@@ -2492,15 +2506,15 @@ function renderReport(payload) {
 
       <div class="page-transition">Risk sets the clock. The next question is what the company can actually build inside that clock — nine Readiness factors measuring the foundations that govern feasible execution speed.</div>
 
-      ${pageFooter(3)}
+      ${pageFooter(4)}
     </div>
   `;
 
-  // ============= PAGE 4 — READINESS SCORECARD =============
+  // ============= PAGE 5 — READINESS SCORECARD =============
   const readinessFactorPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Readiness Factor Scorecard', 4)}
-      ${sectionMarker(4, 'AI Readiness · The Governor')}
+      ${pageHeader(company.name, 'Readiness Factor Scorecard', 5)}
+      ${sectionMarker(5, 'AI Readiness · The Governor')}
       <h1>Readiness Scorecard</h1>
       <p class="lede">Nine factors measuring what the company can actually execute — workflow depth, data foundation, team capability, compounding loops. Higher is better.</p>
 
@@ -2552,15 +2566,15 @@ function renderReport(payload) {
 
       <div class="page-transition">Risk sets the clock; Readiness sets the pace at which the company can actually build. Together they place the company in one of four operating modes — and that placement prescribes the posture the Bridge must adopt.</div>
 
-      ${pageFooter(4)}
+      ${pageFooter(5)}
     </div>
   `;
 
-  // ============= PAGE 8 — BRIDGE · PRIORITIES =============
+  // ============= PAGE 9 — BRIDGE · PRIORITIES =============
   const bridgePage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Bridge Focus', 8)}
-      ${sectionMarker(8, 'Bridge Focus · Priorities')}
+      ${pageHeader(company.name, 'Bridge Focus', 9)}
+      ${sectionMarker(9, 'Bridge Focus · Priorities')}
       <h1>Bridge Focus</h1>
       <p class="lede">Where the Bridge concentrates attention during the hold — sequenced by what unlocks the SOA path fastest.</p>
 
@@ -2572,15 +2586,15 @@ function renderReport(payload) {
 
       <div class="page-transition">The plan names the priorities. Monitoring names the signals that would force us to rewrite it — observable events that, if they fire, trigger a mid-hold re-score and thesis review.</div>
 
-      ${pageFooter(8)}
+      ${pageFooter(9)}
     </div>
   `;
 
-  // ============= PAGE 9 — MONITORING · THRESHOLD TRIGGERS =============
+  // ============= PAGE 10 — MONITORING · THRESHOLD TRIGGERS =============
   const monitoringPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Monitoring', 9)}
-      ${sectionMarker(9, 'Monitoring · Threshold Triggers')}
+      ${pageHeader(company.name, 'Monitoring', 10)}
+      ${sectionMarker(10, 'Monitoring · Threshold Triggers')}
       <h1>Monitoring</h1>
       <p class="lede">Observable events that would force re-underwrite. SOAR watches these quarterly — any trigger firing prompts a mid-hold re-score and thesis review.</p>
 
@@ -2592,15 +2606,15 @@ function renderReport(payload) {
 
       <div class="page-transition">Every claim in this memo is traceable. The final page names the evidence base, confidence read, and methodology details — the audit trail a partner can inspect before committing capital.</div>
 
-      ${pageFooter(9)}
+      ${pageFooter(10)}
     </div>
   `;
 
-  // ============= PAGE 10 — EVIDENCE + METHODOLOGY =============
+  // ============= PAGE 11 — EVIDENCE + METHODOLOGY =============
   const closingPage = `
     <div class="page content">
-      ${pageHeader(company.name, 'Evidence · Audit', 10)}
-      ${sectionMarker(10, 'Evidence · Confidence · Audit')}
+      ${pageHeader(company.name, 'Evidence · Audit', 11)}
+      ${sectionMarker(11, 'Evidence · Confidence · Audit')}
       <h1>Evidence &amp; Audit</h1>
       <p class="lede">The primary sources anchoring this scoring, the confidence read, and full methodology detail for partner inspection.</p>
 
@@ -2650,12 +2664,12 @@ function renderReport(payload) {
         Generated by Eagle Vision · PERCH on ${esc(fmtDate(generatedAt))}. Point-in-time assessment based on evidence available at run time. Scores and posture may shift as new evidence emerges or as the company executes. Distribution limited to AQL Growth partners and authorized recipients.
       </div>
 
-      ${pageFooter(10)}
+      ${pageFooter(11)}
     </div>
   `;
 
   document.getElementById('root').innerHTML =
-    coverPage + execSummaryPage + posturePage +
+    coverPage + execSummaryPage + waveTopsPage + posturePage +
     riskFactorPage + readinessFactorPage +
     quadrantPage + soaPathPage + milestoneDetailPage +
     bridgePage + monitoringPage + closingPage;
