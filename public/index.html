@@ -48,21 +48,21 @@ body {
 
 .brand { display: flex; align-items: center; gap: 14px; }
 .brand-mark { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 500; color: var(--gold-bright); line-height: 1; }
-.brand-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; color: rgba(255,255,255,0.7); text-transform: uppercase; }
-.brand-text div:first-child { color: #fff; font-weight: 600; }
+.brand-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.28em; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+.brand-text div:first-child { color: #fff; font-weight: 700; }
 
 .version { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
 .header-right { display: flex; align-items: center; gap: 18px; }
 .header-nav-link { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; color: var(--gold-bright); text-transform: uppercase; text-decoration: none; padding: 8px 16px; border: 1px solid rgba(230, 197, 128, 0.35); border-radius: 3px; transition: all 0.15s; }
 .header-nav-link:hover { background: rgba(230, 197, 128, 0.1); border-color: rgba(230, 197, 128, 0.7); }
 
-.hero { margin-bottom: 56px; }
+.hero { margin-bottom: 40px; }
 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; color: var(--teal-bright); text-transform: uppercase; margin-bottom: 14px; }
 
-h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 56px; line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 20px; color: #fff; }
+h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 52px; line-height: 1.02; letter-spacing: -0.01em; margin: 0 0 14px; color: #fff; }
 h1 em { color: var(--gold-bright); font-style: italic; }
 
-.subtitle { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; color: rgba(255,255,255,0.8); line-height: 1.5; max-width: 780px; margin: 0 0 32px; }
+.subtitle { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: rgba(255,255,255,0.8); line-height: 1.4; max-width: 760px; margin: 0 0 24px; }
 
 .card { background: var(--navy-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 32px; margin-bottom: 24px; }
 
@@ -75,9 +75,9 @@ h1 em { color: var(--gold-bright); font-style: italic; }
 .education-summary-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--teal-bright); text-transform: uppercase; font-weight: 600; }
 .education-summary-toggle { font-size: 18px; color: var(--teal-bright); transition: transform 0.2s ease; }
 details[open] .education-summary-toggle { transform: rotate(180deg); }
-.education-body { padding: 8px 32px 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px 40px; }
-.education-heading { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold-bright); font-weight: 600; margin-bottom: 12px; }
-.education-body p { color: rgba(255,255,255,0.82); font-size: 14px; line-height: 1.7; margin: 0 0 10px; }
+.education-body { padding: 6px 32px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 40px; }
+.education-heading { font-family: 'Cormorant Garamond', serif; font-size: 21px; color: var(--gold-bright); font-weight: 600; margin-bottom: 10px; }
+.education-body p { color: rgba(255,255,255,0.82); font-size: 14px; line-height: 1.55; margin: 0 0 8px; }
 .education-body p:last-child { margin-bottom: 0; }
 .education-body strong { color: #fff; font-weight: 600; }
 .education-column { }
@@ -742,10 +742,8 @@ details.run-details-section[open] .run-details-summary-toggle { transform: rotat
 
   <div class="header">
     <div class="brand">
-      <div class="brand-mark">Æ</div>
       <div class="brand-text">
         <div>AQL GROWTH</div>
-        <div>PERCH · Eagle Vision</div>
       </div>
     </div>
     <div class="header-right">
@@ -755,7 +753,6 @@ details.run-details-section[open] .run-details-summary-toggle { transform: rotat
   </div>
 
   <div class="hero">
-    <div class="kicker">Stage 3 · Eagle Vision · PERCH · AI Risk &amp; Readiness Diagnostic</div>
     <h1><em>PERCH</em><br>AI Risk &amp; Readiness Diagnostic</h1>
     <div class="subtitle">
       Investment-grade 16-factor diagnostic for vertical software SORs. Where AQL partners go to pressure-test an investment thesis before a term sheet commits the firm.
@@ -783,8 +780,9 @@ details.run-details-section[open] .run-details-summary-toggle { transform: rotat
 
       <div class="education-column">
         <div class="education-heading">Why it matters for AQL</div>
-        <p>The AQL thesis is that vertical software Systems of Record (SORs) undergoing the SOR→SOA transition are where the next decade of MOIC expansion lives. But this transition is not a feature checkbox — it requires the right <strong>category</strong> (protected moat), the right <strong>company</strong> (foundation ready to compound), and the right <strong>sequencing</strong> (Bridge playbook tailored to urgency and feasible speed).</p>
-        <p>PERCH diagnoses all three, simultaneously, in one evidence-backed instrument. It's how the firm holds itself to a consistent, repeatable bar on AI-era deals.</p>
+        <p>AQL invests in <strong>Emerging Systems of Action</strong> — vertical software platforms that start as the System of Record and earn the right to become the System of Action for their industry.</p>
+        <p>That transition is not a feature checkbox. It requires the right <strong>category</strong> (a protected moat), the right <strong>company</strong> (foundations ready to compound), and the right <strong>sequencing</strong> (a Bridge playbook tailored to urgency and feasible speed).</p>
+        <p>PERCH diagnoses all three, simultaneously, in one evidence-backed instrument. It is how the firm holds itself to a consistent, repeatable bar on every AI-era deal.</p>
         <p style="font-size:13px; color:rgba(255,255,255,0.6); margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.08);"><em>PERCH is the diagnostic instrument; the <strong style="color:var(--gold-bright);">AQL AI Risk &amp; Readiness Framework</strong> is the underlying methodology.</em></p>
       </div>
 
