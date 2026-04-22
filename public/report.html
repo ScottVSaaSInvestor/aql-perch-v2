@@ -59,7 +59,7 @@ html, body {
 .page {
   width: 8.5in;
   height: 11in;
-  padding: 0.7in 0.75in 0.9in;
+  padding: 0.7in 0.75in 1.2in;
   margin: 28px auto;
   background: var(--navy);
   background-image:
@@ -1308,14 +1308,14 @@ strong { font-weight: 600; color: var(--ink); }
 
 /* Transition paragraphs between pages */
 .page-transition {
-  margin-top: 18pt;
-  padding: 12pt 16pt 12pt 22pt;
+  margin-top: 12pt;
+  padding: 7pt 12pt 7pt 16pt;
   border-left: 2pt solid var(--gold-dim);
   font-family: 'Cormorant Garamond', serif;
-  font-size: 11pt;
+  font-size: 9.5pt;
   font-style: italic;
-  color: var(--ink-soft);
-  line-height: 1.55;
+  color: var(--ink-muted);
+  line-height: 1.4;
   page-break-inside: avoid;
   break-inside: avoid;
 }
@@ -1324,7 +1324,7 @@ strong { font-weight: 600; color: var(--ink); }
   color: var(--gold-bright);
   font-style: normal;
   font-weight: 700;
-  margin-right: 4pt;
+  margin-right: 3pt;
 }
 
 /* ============================================================
@@ -1459,10 +1459,10 @@ strong { font-weight: 600; color: var(--ink); }
 .factor-definition {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8pt;
-  margin-top: 5pt;
-  margin-bottom: 7pt;
-  padding: 7pt 10pt;
+  gap: 6pt;
+  margin-top: 3pt;
+  margin-bottom: 4pt;
+  padding: 5pt 8pt;
   background: rgba(255,255,255,0.025);
   border-radius: 2pt;
   border-left: 2pt solid rgba(45, 212, 191, 0.45);
@@ -1471,17 +1471,17 @@ strong { font-weight: 600; color: var(--ink); }
 .factor-definition-block { }
 .factor-definition-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 6.5pt;
-  letter-spacing: 0.18em;
+  font-size: 6pt;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--teal-bright);
   font-weight: 700;
-  margin-bottom: 2pt;
+  margin-bottom: 1pt;
 }
 .factor-definition.readiness .factor-definition-label { color: var(--gold-bright); }
 .factor-definition-text {
-  font-size: 8pt;
-  line-height: 1.45;
+  font-size: 7.5pt;
+  line-height: 1.35;
   color: var(--ink-soft);
   font-style: italic;
 }
@@ -1489,8 +1489,8 @@ strong { font-weight: 600; color: var(--ink); }
 .factor {
   display: grid;
   grid-template-columns: 36pt 1fr 72pt;
-  gap: 14pt;
-  padding: 8pt 0;
+  gap: 12pt;
+  padding: 6pt 0;
   border-bottom: 0.5pt solid var(--rule-soft);
   page-break-inside: avoid;
   break-inside: avoid;
@@ -1513,7 +1513,7 @@ strong { font-weight: 600; color: var(--ink); }
 .factor-rationale {
   font-size: 8.5pt;
   color: var(--ink-soft);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 .factor-num-block {
   text-align: right;
