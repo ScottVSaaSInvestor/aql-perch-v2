@@ -303,6 +303,108 @@ ${f.description}`).join('\n\n')}
 Bands: 0-40 Early/weak. 41-50 Developing (legitimate BUILD MODE territory). 51-65 Moderate-strong EXECUTE. 66-79 Strong EXECUTE. 80+ Best-in-class.
 
 ============================================================
+⚠ READINESS SCORING DISCIPLINE — IN-PRODUCTION vs POTENTIAL ⚠
+============================================================
+
+Common error to avoid: scoring THEORETICAL CAPABILITY at the same level as IN-PRODUCTION EXECUTION. Readiness measures what the company can actually ship today, not what their architecture or strategy theoretically permits. If a feature, loop, or capability is described in roadmap language ("will," "planned," "potential," "theoretical flywheel"), score the EVIDENCE of execution — not the description of intent.
+
+Apply this discipline especially to A1, A2, A3, A4, A7, and A8.
+
+═══════════════════════════════════════════════════════════
+A1 - WORKFLOW EMBEDDEDNESS — anchor calibration
+═══════════════════════════════════════════════════════════
+What separates 75 from 88:
+
+  85-95 = STRUCTURAL LOCK-IN. Sticky by construction, not by preference.
+    • Mandatory regulatory cert (HIPAA + EVV, FedRAMP, FDA)
+    • Hardware-tied (POS hardware, EMR with deep integrations to insurance/payer rails)
+    • Government-funded workflows (Medicaid billing, Title IV reporting)
+    • Multi-stakeholder cross-organizational dependency that cannot be unwound
+    Examples at this level: AxisCare (HIPAA + EVV across 50 states), Toast (POS hardware-tied), Epic EHR
+
+  75-84 = HIGH USAGE + HIGH SWITCHING COST + MULTI-STAKEHOLDER. Embedded, but replaceable with effort.
+    • Daily active use across most FTEs in customer business
+    • Cross-functional workflows (sales + production + finance + admin)
+    • Significant data migration burden if switched
+    • No regulatory mandate but deep operational entrenchment
+    Examples at this level: CommonSKU (90%+ FTE daily use, end-to-end order lifecycle, $1.8B sales processed), Jane Software, ServiceTitan
+
+  65-74 = CENTRAL to ONE workflow, not all stakeholders. Important but specialized.
+
+  50-64 = IMPORTANT TOOL but replaceable. Used by some FTEs daily, others weekly or less.
+
+  <50 = PERIPHERAL. Single-feature or department-level.
+
+Key calibration: usage volume + multi-stakeholder + switching difficulty earn 75-84. Structural regulatory or hardware lock-in is required for 85+.
+
+═══════════════════════════════════════════════════════════
+A4 - VALUE QUANTIFICATION — anchor calibration
+═══════════════════════════════════════════════════════════
+What separates 50 from 75:
+
+  75-90 = PER-CUSTOMER, DOLLAR-DENOMINATED, BASELINE-MEASURED.
+    • Tracks ROI feature-by-feature for each customer with baseline measurement
+    • Automated value attribution dashboards customers can see
+    • Outcome tracking flows back into pricing decisions
+    Score this only with EVIDENCE of in-production per-customer dollar tracking.
+
+  60-74 = CASE STUDIES + ROI CALCULATOR + TRANSPARENT UNIT ECONOMICS.
+    • Marketing ROI calculator on website
+    • Customer case studies with specific revenue/efficiency outcomes
+    • Strong CLTV/CAC visibility at the company level
+    • BUT no per-customer per-feature ROI tracking in production
+
+  45-59 = ROI calculator OR case studies but limited mature framework.
+    • Has SOME value quantification but it's primarily marketing-grade
+    • Per-customer, automated value attribution explicitly described as "developing" or "not yet visible"
+
+  <45 = No structured value quantification framework.
+
+Calibration warning: if the rationale itself uses language like "developing capability," "not yet visible," "appears to be," or "would benefit from" — the score should be in the 45-59 band, NOT 60+. Read the rationale honestly. If it qualifies the strength, the score must reflect the qualifier.
+
+═══════════════════════════════════════════════════════════
+A8 - COMPOUNDING LOOP POTENTIAL — anchor calibration
+═══════════════════════════════════════════════════════════
+"Potential" is in the factor name but the SCORING measures evidence of execution toward the loop, not theoretical mechanics:
+
+  75-90 = LOOP IS LIVE END-TO-END.
+    • Usage → outcome labels → model improvement → measurable outcome lift → monetization is closed
+    • Evidence: model performance improving over time, outcome lift measured, lift translated to revenue
+    Score this only when ALL stages are in production with measurable improvement.
+
+  60-74 = FIRST STAGES OF LOOP ARE LIVE. Other stages described but not measured.
+    • Usage → labels exists in production
+    • Model improvement happening but not measured against outcomes
+    • Monetization via the loop not yet evident
+
+  45-59 = LOOP IS THEORIZED with strong building blocks but not closed.
+    • Compounding mechanics described (e.g., "more distributors → more suppliers → more data → better recommendations")
+    • Components exist (data, AI features shipping, network effects)
+    • BUT no evidence that improvement → outcome → monetization is closing back
+
+  <45 = NO LOOP CONCEPTION or building blocks missing.
+
+Calibration warning: theoretical flywheel mechanics ("more X → more Y → better Z") describe POTENTIAL, not LIVE LOOP. If the rationale describes what COULD compound rather than what IS compounding, score 45-59. Live, measurable, in-production loops earn 75+.
+
+═══════════════════════════════════════════════════════════
+A2, A7 - DATA & ARCHITECTURE — read the rationale honestly
+═══════════════════════════════════════════════════════════
+If the company's tech diligence flags legacy tech debt requiring 6-12 months remediation, A2/A7 score should be 50-65, NOT 65+. Acknowledge the legacy explicitly in the score level. Cloud-hosted multi-tenant ALONE earns 55-65, not 70+. 70+ requires evidence of modern data infrastructure (CDC, schema discipline, observability, ML inference pipeline) being actively used.
+
+═══════════════════════════════════════════════════════════
+GENERAL READINESS DISCIPLINE
+═══════════════════════════════════════════════════════════
+Read every rationale you write critically before locking the score:
+
+1. Does the rationale use qualifying language ("developing," "improving but," "not yet visible," "would benefit from," "appears to be")? If YES, the score must sit in the next-lower band, not the upper band.
+
+2. Are you scoring CAPABILITY DESCRIBED or CAPABILITY EVIDENCED? Score evidence.
+
+3. If the rationale describes a flywheel or loop in conditional language ("more X would lead to Y"), that is POTENTIAL not live execution. Score 45-59, not 70+.
+
+4. The 80+ band is RESERVED for best-in-class evidenced execution. Default upper bound for "shipping AI features but not yet a System of Action" should be 75-78, not 80+.
+
+============================================================
 CALIBRATION ANCHORS - REAL AQL PORTFOLIO
 ============================================================
 
